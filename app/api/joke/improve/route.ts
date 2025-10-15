@@ -5,6 +5,7 @@ import {
   improveJokePrompt,
   ERROR_MESSAGES,
 } from "@/lib/ai-prompts";
+import { extractResponseText } from "@/lib/openai-response";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -22,17 +23,23 @@ export async function POST(request: NextRequest) {
     const prompt = improveJokePrompt(setup, punchline, direction);
     const systemPrompt = SYSTEM_PROMPTS["joke-improvement"];
 
-    const completion = await openai.chat.completions.create({
+    const completion = await openai.responses.create({
       model: "gpt-5",
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: prompt },
+      input: [
+        {
+          role: "system",
+          content: [{ type: "input_text", text: systemPrompt }],
+        },
+        {
+          role: "user",
+          content: [{ type: "input_text", text: prompt }],
+        },
       ],
       temperature: 0.7,
-      max_tokens: 500,
+      max_output_tokens: 500,
     });
 
-    const responseContent = completion.choices[0]?.message?.content;
+    const responseContent = extractResponseText(completion);
 
     if (!responseContent) {
       throw new Error("No response from AI");

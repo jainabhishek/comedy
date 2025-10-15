@@ -10,7 +10,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { formatDate, formatTime } from "@/lib/utils";
-import type { Joke, JokeVersion, Performance } from "@/lib/types";
+import type {
+  Joke,
+  JokeVersion,
+  JokeImprovement,
+  WeaknessReport,
+  Weakness,
+} from "@/lib/types";
 import { nanoid } from "nanoid";
 
 export default function JokeEditor({ params }: { params: Promise<{ id: string }> }) {
@@ -32,9 +38,8 @@ export default function JokeEditor({ params }: { params: Promise<{ id: string }>
   
   const [showVersions, setShowVersions] = useState(false);
   const [showPerformances, setShowPerformances] = useState(false);
-  const [showAiSuggestions, setShowAiSuggestions] = useState(false);
-  const [aiSuggestion, setAiSuggestion] = useState<any>(null);
-  const [aiAnalysis, setAiAnalysis] = useState<any>(null);
+  const [aiSuggestion, setAiSuggestion] = useState<JokeImprovement | null>(null);
+  const [aiAnalysis, setAiAnalysis] = useState<WeaknessReport | null>(null);
 
   const [newTag, setNewTag] = useState("");
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
@@ -83,8 +88,10 @@ export default function JokeEditor({ params }: { params: Promise<{ id: string }>
         <div className="text-center">
           <div className="text-6xl mb-4">🔍</div>
           <h2 className="text-2xl font-bold mb-2">Joke Not Found</h2>
-          <p className="text-muted mb-6">This joke doesn't exist or has been deleted.</p>
-          <Button onClick={() => router.push("/")}>Back to Dashboard</Button>
+          <p className="text-muted mb-6">This joke doesn&apos;t exist or has been deleted.</p>
+          <Button onClick={() => router.push("/dashboard")}>
+            Back to Dashboard
+          </Button>
         </div>
       </div>
     );
@@ -123,12 +130,11 @@ export default function JokeEditor({ params }: { params: Promise<{ id: string }>
   const handleDelete = () => {
     if (confirm("Are you sure you want to delete this joke? This cannot be undone.")) {
       deleteJoke(joke.id);
-      router.push("/");
+      router.push("/dashboard");
     }
   };
 
   const handlePunchUp = async () => {
-    setShowAiSuggestions(true);
     const result = await improveJoke(
       editedSetup,
       editedPunchline,
@@ -152,7 +158,6 @@ export default function JokeEditor({ params }: { params: Promise<{ id: string }>
       setEditedSetup(aiSuggestion.setup);
       setEditedPunchline(aiSuggestion.punchline);
       setAiSuggestion(null);
-      setShowAiSuggestions(false);
     }
   };
 
@@ -180,7 +185,7 @@ export default function JokeEditor({ params }: { params: Promise<{ id: string }>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <Button variant="secondary" onClick={() => router.push("/")}>
+          <Button variant="secondary" onClick={() => router.push("/dashboard")}>
             ← Back to Dashboard
           </Button>
         </div>
@@ -305,25 +310,31 @@ export default function JokeEditor({ params }: { params: Promise<{ id: string }>
               {aiAnalysis && (
                 <div className="p-4 bg-secondary/5 rounded-lg border border-secondary/20 space-y-3">
                   <p className="font-medium text-secondary">Analysis Results:</p>
-                  {aiAnalysis.weaknesses?.length > 0 && (
+                  {aiAnalysis.weaknesses.length > 0 && (
                     <div className="space-y-2">
                       <p className="text-sm font-medium">Weaknesses:</p>
-                      {aiAnalysis.weaknesses.map((w: any, i: number) => (
-                        <div key={i} className="text-sm p-2 bg-white rounded border">
-                          <Badge variant={w.severity === "high" ? "warning" : "outline"} className="mb-1">
-                            {w.type}
+                      {aiAnalysis.weaknesses.map((weakness: Weakness, index) => (
+                        <div
+                          key={`${weakness.type}-${index}`}
+                          className="text-sm p-2 bg-white rounded border"
+                        >
+                          <Badge
+                            variant={weakness.severity === "high" ? "warning" : "outline"}
+                            className="mb-1"
+                          >
+                            {weakness.type}
                           </Badge>
-                          <p className="text-muted">{w.description}</p>
+                          <p className="text-muted">{weakness.description}</p>
                         </div>
                       ))}
                     </div>
                   )}
-                  {aiAnalysis.suggestions?.length > 0 && (
+                  {aiAnalysis.suggestions.length > 0 && (
                     <div className="space-y-1">
                       <p className="text-sm font-medium">Suggestions:</p>
                       <ul className="list-disc list-inside text-sm text-muted">
-                        {aiAnalysis.suggestions.map((s: string, i: number) => (
-                          <li key={i}>{s}</li>
+                        {aiAnalysis.suggestions.map((suggestion, index) => (
+                          <li key={`${suggestion}-${index}`}>{suggestion}</li>
                         ))}
                       </ul>
                     </div>
@@ -361,7 +372,7 @@ export default function JokeEditor({ params }: { params: Promise<{ id: string }>
                 <label className="block text-sm font-medium mb-1">Status</label>
                 <select
                   value={editedStatus}
-                  onChange={(e) => setEditedStatus(e.target.value as any)}
+                  onChange={(e) => setEditedStatus(e.target.value as Joke["status"])}
                   className="w-full p-2 border rounded-lg"
                 >
                   <option value="draft">Draft</option>
@@ -375,7 +386,7 @@ export default function JokeEditor({ params }: { params: Promise<{ id: string }>
                 <label className="block text-sm font-medium mb-1">Type</label>
                 <select
                   value={editedType}
-                  onChange={(e) => setEditedType(e.target.value as any)}
+                  onChange={(e) => setEditedType(e.target.value as Joke["type"])}
                   className="w-full p-2 border rounded-lg"
                 >
                   <option value="observational">Observational</option>
@@ -390,7 +401,7 @@ export default function JokeEditor({ params }: { params: Promise<{ id: string }>
                 <label className="block text-sm font-medium mb-1">Energy</label>
                 <select
                   value={editedEnergy}
-                  onChange={(e) => setEditedEnergy(e.target.value as any)}
+                  onChange={(e) => setEditedEnergy(e.target.value as Joke["energy"])}
                   className="w-full p-2 border rounded-lg"
                 >
                   <option value="low">Low</option>
@@ -519,4 +530,3 @@ export default function JokeEditor({ params }: { params: Promise<{ id: string }>
     </div>
   );
 }
-

@@ -1,5 +1,3 @@
-import type { AIContext } from "./types";
-
 // System Prompts with Guardrails
 
 export const SYSTEM_PROMPTS = {
@@ -132,33 +130,50 @@ const COMEDY_KEYWORDS = [
   "topper",
 ];
 
-export function validateComedyInput(input: string): boolean {
-  const lowerInput = input.toLowerCase();
+function matchesKeyword(text: string, keyword: string): boolean {
+  const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const spaced = escaped.replace(/\s+/g, "\\s+");
+  const pattern = new RegExp(`\\b${spaced}\\b`, "i");
+  return pattern.test(text);
+}
 
-  // Check for off-topic keywords
+export function validateComedyInput(input: string): boolean {
+  const trimmed = input.trim();
+  if (!trimmed) {
+    return false;
+  }
+
+  const lowerInput = trimmed.toLowerCase();
+
+  // Block only clearly off-topic prompts so the experience stays open-ended.
   const hasOffTopicKeyword = OFF_TOPIC_KEYWORDS.some((keyword) =>
-    lowerInput.includes(keyword)
+    matchesKeyword(trimmed, keyword)
   );
 
   if (hasOffTopicKeyword) {
     return false;
   }
 
-  // For very short inputs, be lenient
-  if (input.length < 20) {
+  // Short and medium-length prompts are often exploratory—let them through.
+  if (trimmed.length <= 200) {
     return true;
   }
 
-  // For longer inputs, check if it contains comedy-related terms
+  // Longer briefs should mention something comedy-adjacent, but stay generous.
   const hasComedyKeyword = COMEDY_KEYWORDS.some((keyword) =>
     lowerInput.includes(keyword)
   );
 
-  // If it's a long input with no comedy keywords, might be off-topic
-  if (input.length > 100 && !hasComedyKeyword) {
-    return false;
+  if (hasComedyKeyword) {
+    return true;
   }
 
+  const creativeSignals = ["story", "bit", "audience", "humor", "humour", "stage", "laugh"];
+  if (creativeSignals.some((keyword) => lowerInput.includes(keyword))) {
+    return true;
+  }
+
+  // Fall back to allowing the prompt—the guardrails are relaxed now.
   return true;
 }
 

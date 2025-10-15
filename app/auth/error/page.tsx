@@ -1,11 +1,12 @@
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 
-export default function AuthError() {
+function ErrorContent() {
   const searchParams = useSearchParams();
   const error = searchParams?.get("error");
 
@@ -37,7 +38,7 @@ export default function AuthError() {
               <ul className="list-disc list-inside mt-2 space-y-1 text-left">
                 <li>Your session expired</li>
                 <li>The authentication link was already used</li>
-                <li>There's a temporary server issue</li>
+                <li>There&apos;s a temporary server issue</li>
               </ul>
             </div>
 
@@ -59,3 +60,16 @@ export default function AuthError() {
   );
 }
 
+export default function AuthError() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center text-muted">Loading...</div>
+        </div>
+      }
+    >
+      <ErrorContent />
+    </Suspense>
+  );
+}

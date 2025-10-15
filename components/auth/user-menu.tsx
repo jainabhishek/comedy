@@ -1,6 +1,7 @@
 "use client";
 
 import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
@@ -29,10 +30,13 @@ export function UserMenu() {
         className="flex items-center gap-2 hover:opacity-80 transition-opacity"
       >
         {session.user?.image ? (
-          <img
+          <Image
             src={session.user.image}
             alt={session.user.name || "User"}
-            className="w-10 h-10 rounded-full border-2 border-primary"
+            width={40}
+            height={40}
+            className="w-10 h-10 rounded-full border-2 border-primary object-cover"
+            unoptimized
           />
         ) : (
           <div className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">
@@ -69,4 +73,3 @@ export function UserMenu() {
     </div>
   );
 }
-

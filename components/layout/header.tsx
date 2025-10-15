@@ -8,8 +8,15 @@ import { UserMenu } from "@/components/auth/user-menu";
 export function Header() {
   const pathname = usePathname();
 
-  const navItems = [
-    { href: "/", label: "Dashboard" },
+  type NavItem = {
+    href: string;
+    label: string;
+    exact?: boolean;
+  };
+
+  const navItems: NavItem[] = [
+    { href: "/", label: "Home", exact: true },
+    { href: "/dashboard", label: "Dashboard" },
     { href: "/workshop", label: "Workshop" },
     { href: "/routines", label: "Routines" },
   ];
@@ -31,7 +38,7 @@ export function Header() {
                   href={item.href}
                   className={cn(
                     "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
-                    pathname === item.href
+                    (item.exact ? pathname === item.href : pathname.startsWith(item.href))
                       ? "bg-primary text-white shadow-glass"
                       : "text-muted hover:text-foreground hover:bg-glass-bg/30"
                   )}

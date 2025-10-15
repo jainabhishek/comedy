@@ -6,6 +6,7 @@ import {
   suggestPlacementPrompt,
   ERROR_MESSAGES,
 } from "@/lib/ai-prompts";
+import { extractResponseText } from "@/lib/openai-response";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -33,17 +34,23 @@ export async function POST(request: NextRequest) {
       systemPrompt = SYSTEM_PROMPTS["routine-analysis"];
     }
 
-    const completion = await openai.chat.completions.create({
+    const completion = await openai.responses.create({
       model: "gpt-5",
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: prompt },
+      input: [
+        {
+          role: "system",
+          content: [{ type: "input_text", text: systemPrompt }],
+        },
+        {
+          role: "user",
+          content: [{ type: "input_text", text: prompt }],
+        },
       ],
       temperature: 0.6,
-      max_tokens: 1500,
+      max_output_tokens: 1500,
     });
 
-    const responseContent = completion.choices[0]?.message?.content;
+    const responseContent = extractResponseText(completion);
 
     if (!responseContent) {
       throw new Error("No response from AI");

@@ -141,11 +141,11 @@ export function calculatePerformanceRating(
 }
 
 // Debounce Function
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {
-  let timeout: NodeJS.Timeout | null = null;
+  let timeout: ReturnType<typeof setTimeout> | null = null;
 
   return function executedFunction(...args: Parameters<T>) {
     const later = () => {
@@ -161,17 +161,19 @@ export function debounce<T extends (...args: any[]) => any>(
 }
 
 // Throttle Function
-export function throttle<T extends (...args: any[]) => any>(
+export function throttle<T extends (...args: unknown[]) => unknown>(
   func: T,
   limit: number
 ): (...args: Parameters<T>) => void {
-  let inThrottle: boolean;
+  let inThrottle = false;
 
   return function executedFunction(...args: Parameters<T>) {
     if (!inThrottle) {
       func(...args);
       inThrottle = true;
-      setTimeout(() => (inThrottle = false), limit);
+      setTimeout(() => {
+        inThrottle = false;
+      }, limit);
     }
   };
 }
@@ -185,7 +187,7 @@ export function safeJsonParse<T>(json: string, fallback: T): T {
   }
 }
 
-export function safeJsonStringify(obj: any, fallback: string = "{}"): string {
+export function safeJsonStringify(obj: unknown, fallback: string = "{}"): string {
   try {
     return JSON.stringify(obj);
   } catch {

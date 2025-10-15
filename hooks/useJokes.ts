@@ -155,32 +155,64 @@ export function useJokes() {
   const sortJokes = useCallback((jokesToSort: Joke[], sortOption: JokeSortOption) => {
     const sorted = [...jokesToSort];
 
+    const getPerformanceRating = (joke: Joke): number => {
+      if (joke.performances.length === 0) {
+        return 0;
+      }
+
+      const scores: Record<Joke["performances"][number]["outcome"], number> = {
+        killed: 100,
+        worked: 70,
+        neutral: 50,
+        bombed: 20,
+      };
+
+      const totalScore = joke.performances.reduce((sum, performance) => {
+        return sum + scores[performance.outcome];
+      }, 0);
+
+      return totalScore / joke.performances.length;
+    };
+
     sorted.sort((a, b) => {
-      let aValue: any = a[sortOption.field];
-      let bValue: any = b[sortOption.field];
+      let aValue: number | string;
+      let bValue: number | string;
 
-      // Handle special case for performance rating
-      if (sortOption.field === "performanceRating") {
-        aValue = a.performances.length > 0
-          ? a.performances.reduce((sum, p) => {
-              const scores = { killed: 100, worked: 70, neutral: 50, bombed: 20 };
-              return sum + scores[p.outcome];
-            }, 0) / a.performances.length
-          : 0;
+      switch (sortOption.field) {
+        case "title":
+          aValue = a.title.toLowerCase();
+          bValue = b.title.toLowerCase();
+          break;
+        case "estimatedTime":
+          aValue = a.estimatedTime;
+          bValue = b.estimatedTime;
+          break;
+        case "createdAt":
+          aValue = a.createdAt;
+          bValue = b.createdAt;
+          break;
+        case "updatedAt":
+          aValue = a.updatedAt;
+          bValue = b.updatedAt;
+          break;
+        case "performanceRating":
+          aValue = getPerformanceRating(a);
+          bValue = getPerformanceRating(b);
+          break;
+        default:
+          aValue = 0;
+          bValue = 0;
+      }
 
-        bValue = b.performances.length > 0
-          ? b.performances.reduce((sum, p) => {
-              const scores = { killed: 100, worked: 70, neutral: 50, bombed: 20 };
-              return sum + scores[p.outcome];
-            }, 0) / b.performances.length
-          : 0;
+      if (aValue === bValue) {
+        return 0;
       }
 
       if (sortOption.direction === "asc") {
         return aValue > bValue ? 1 : -1;
-      } else {
-        return aValue < bValue ? 1 : -1;
       }
+
+      return aValue < bValue ? 1 : -1;
     });
 
     return sorted;

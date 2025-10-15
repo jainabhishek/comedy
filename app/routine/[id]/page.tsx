@@ -11,7 +11,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { formatTime } from "@/lib/utils";
-import type { Routine, Joke } from "@/lib/types";
+import type { Routine, Joke, FlowAnalysis, RoutineJokeSummary } from "@/lib/types";
 
 export default function RoutineBuilder({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
@@ -26,7 +26,7 @@ export default function RoutineBuilder({ params }: { params: Promise<{ id: strin
   const [editedName, setEditedName] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
-  const [flowAnalysis, setFlowAnalysis] = useState<any>(null);
+  const [flowAnalysis, setFlowAnalysis] = useState<FlowAnalysis | null>(null);
 
   useEffect(() => {
     params.then((p) => setRoutineId(p.id));
@@ -66,7 +66,7 @@ export default function RoutineBuilder({ params }: { params: Promise<{ id: strin
         <div className="text-center">
           <div className="text-6xl mb-4">🔍</div>
           <h2 className="text-2xl font-bold mb-2">Routine Not Found</h2>
-          <p className="text-muted mb-6">This routine doesn't exist or has been deleted.</p>
+          <p className="text-muted mb-6">This routine doesn&apos;t exist or has been deleted.</p>
           <Button onClick={() => router.push("/routines")}>Back to Routines</Button>
         </div>
       </div>
@@ -125,7 +125,7 @@ export default function RoutineBuilder({ params }: { params: Promise<{ id: strin
   };
 
   const handleOptimize = async () => {
-    const jokesData = routineJokes.map((j) => ({
+    const jokesData: RoutineJokeSummary[] = routineJokes.map((j): RoutineJokeSummary => ({
       id: j.id,
       title: j.title,
       energy: j.energy,
@@ -137,7 +137,7 @@ export default function RoutineBuilder({ params }: { params: Promise<{ id: strin
     
     if (result && result.optimizedOrder) {
       const optimized = result.optimizedOrder
-        .map((id: string) => routineJokes.find((j) => j.id === id))
+        .map((id) => routineJokes.find((j) => j.id === id))
         .filter((j): j is Joke => j !== undefined);
       
       if (confirm(`AI suggests reordering for better flow. Apply changes?\n\nReason: ${result.reasoning}`)) {
@@ -147,7 +147,7 @@ export default function RoutineBuilder({ params }: { params: Promise<{ id: strin
   };
 
   const handleAnalyze = async () => {
-    const jokesData = routineJokes.map((j) => ({
+    const jokesData: RoutineJokeSummary[] = routineJokes.map((j): RoutineJokeSummary => ({
       id: j.id,
       title: j.title,
       energy: j.energy,
@@ -257,10 +257,10 @@ export default function RoutineBuilder({ params }: { params: Promise<{ id: strin
                 {flowAnalysis.suggestions?.length > 0 && (
                   <div className="space-y-2">
                     <p className="text-sm font-medium">Suggestions:</p>
-                    {flowAnalysis.suggestions.slice(0, 3).map((s: any, i: number) => (
-                      <div key={i} className="text-sm p-2 bg-white rounded border">
-                        <p className="font-medium">{s.type}</p>
-                        <p className="text-muted">{s.reason}</p>
+                    {flowAnalysis.suggestions.slice(0, 3).map((suggestion, index) => (
+                      <div key={`${suggestion.type}-${index}`} className="text-sm p-2 bg-white rounded border">
+                        <p className="font-medium">{suggestion.type}</p>
+                        <p className="text-muted">{suggestion.reason}</p>
                       </div>
                     ))}
                   </div>
@@ -469,4 +469,3 @@ export default function RoutineBuilder({ params }: { params: Promise<{ id: strin
     </div>
   );
 }
-

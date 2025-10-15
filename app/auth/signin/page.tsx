@@ -74,7 +74,7 @@ export default function SignIn() {
 
         {/* Features Preview */}
         <div className="text-center space-y-2">
-          <p className="text-sm text-muted font-medium">What you'll get:</p>
+          <p className="text-sm text-muted font-medium">What you&apos;ll get:</p>
           <div className="flex flex-wrap justify-center gap-2">
             <span className="text-xs bg-primary/10 text-primary px-3 py-1 rounded-full">
               AI Joke Generation
@@ -91,4 +91,3 @@ export default function SignIn() {
     </div>
   );
 }
-

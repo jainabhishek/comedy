@@ -1,12 +1,13 @@
 import { useState, useCallback } from "react";
 import type {
   Joke,
-  Routine,
   Performance,
   WeaknessReport,
   FlowAnalysis,
   PlacementSuggestion,
   PerformanceInsights,
+  JokeImprovement,
+  RoutineJokeSummary,
 } from "@/lib/types";
 
 export function useAI() {
@@ -30,7 +31,7 @@ export function useAI() {
         throw new Error(error.error || "Failed to generate setups");
       }
 
-      const data = await response.json();
+      const data: { suggestions: string[] } = await response.json();
       return data.suggestions;
     } catch (err) {
       const message = err instanceof Error ? err.message : "Unknown error";
@@ -58,7 +59,7 @@ export function useAI() {
         throw new Error(error.error || "Failed to generate punchlines");
       }
 
-      const data = await response.json();
+      const data: { suggestions: string[] } = await response.json();
       return data.suggestions;
     } catch (err) {
       const message = err instanceof Error ? err.message : "Unknown error";
@@ -75,7 +76,7 @@ export function useAI() {
       setup: string,
       punchline: string,
       direction: string
-    ): Promise<{ setup: string; punchline: string; explanation: string }> => {
+    ): Promise<JokeImprovement> => {
       setLoading(true);
       setError(null);
 
@@ -91,7 +92,7 @@ export function useAI() {
           throw new Error(error.error || "Failed to improve joke");
         }
 
-        const data = await response.json();
+        const data: JokeImprovement = await response.json();
         return data;
       } catch (err) {
         const message = err instanceof Error ? err.message : "Unknown error";
@@ -122,7 +123,7 @@ export function useAI() {
           throw new Error(error.error || "Failed to analyze joke");
         }
 
-        const data = await response.json();
+        const data: WeaknessReport = await response.json();
         return data;
       } catch (err) {
         const message = err instanceof Error ? err.message : "Unknown error";
@@ -152,7 +153,7 @@ export function useAI() {
         throw new Error(error.error || "Failed to suggest tags");
       }
 
-      const data = await response.json();
+      const data: string[] = await response.json();
       return data;
     } catch (err) {
       const message = err instanceof Error ? err.message : "Unknown error";
@@ -164,23 +165,15 @@ export function useAI() {
   }, []);
 
   // Analyze routine
-  const analyzeRoutine = useCallback(async (routine: Routine, jokes: Joke[]): Promise<FlowAnalysis> => {
+  const analyzeRoutine = useCallback(async (jokes: RoutineJokeSummary[]): Promise<FlowAnalysis> => {
     setLoading(true);
     setError(null);
 
     try {
-      const jokesData = jokes.map((j) => ({
-        id: j.id,
-        title: j.title,
-        energy: j.energy,
-        type: j.type,
-        estimatedTime: j.estimatedTime,
-      }));
-
       const response = await fetch("/api/routine/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ jokes: jokesData }),
+        body: JSON.stringify({ jokes }),
       });
 
       if (!response.ok) {
@@ -188,7 +181,7 @@ export function useAI() {
         throw new Error(error.error || "Failed to analyze routine");
       }
 
-      const data = await response.json();
+      const data: FlowAnalysis = await response.json();
       return data;
     } catch (err) {
       const message = err instanceof Error ? err.message : "Unknown error";
@@ -201,23 +194,15 @@ export function useAI() {
 
   // Optimize routine
   const optimizeRoutine = useCallback(
-    async (jokes: Joke[]): Promise<{ optimizedOrder: string[]; reasoning: string }> => {
+    async (jokes: RoutineJokeSummary[]): Promise<{ optimizedOrder: string[]; reasoning: string }> => {
       setLoading(true);
       setError(null);
 
       try {
-        const jokesData = jokes.map((j) => ({
-          id: j.id,
-          title: j.title,
-          energy: j.energy,
-          type: j.type,
-          estimatedTime: j.estimatedTime,
-        }));
-
         const response = await fetch("/api/routine/optimize", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ jokes: jokesData }),
+          body: JSON.stringify({ jokes }),
         });
 
         if (!response.ok) {
@@ -225,7 +210,7 @@ export function useAI() {
           throw new Error(error.error || "Failed to optimize routine");
         }
 
-        const data = await response.json();
+        const data: { optimizedOrder: string[]; reasoning: string } = await response.json();
         return data;
       } catch (err) {
         const message = err instanceof Error ? err.message : "Unknown error";
@@ -240,7 +225,10 @@ export function useAI() {
 
   // Suggest placement for new joke
   const suggestPlacement = useCallback(
-    async (newJoke: Joke, existingJokes: Joke[]): Promise<{ suggestions: PlacementSuggestion[] }> => {
+    async (
+      newJoke: RoutineJokeSummary,
+      existingJokes: RoutineJokeSummary[]
+    ): Promise<{ suggestions: PlacementSuggestion[] }> => {
       setLoading(true);
       setError(null);
 
@@ -251,10 +239,10 @@ export function useAI() {
           type: newJoke.type,
         };
 
-        const existingJokesData = existingJokes.map((j) => ({
-          title: j.title,
-          energy: j.energy,
-          type: j.type,
+        const existingJokesData = existingJokes.map((joke) => ({
+          title: joke.title,
+          energy: joke.energy,
+          type: joke.type,
         }));
 
         const response = await fetch("/api/routine/analyze", {
@@ -272,7 +260,7 @@ export function useAI() {
           throw new Error(error.error || "Failed to suggest placement");
         }
 
-        const data = await response.json();
+        const data: { suggestions: PlacementSuggestion[] } = await response.json();
         return data;
       } catch (err) {
         const message = err instanceof Error ? err.message : "Unknown error";
@@ -313,7 +301,7 @@ export function useAI() {
           throw new Error(error.error || "Failed to analyze performances");
         }
 
-        const data = await response.json();
+        const data: PerformanceInsights = await response.json();
         return data;
       } catch (err) {
         const message = err instanceof Error ? err.message : "Unknown error";

@@ -10,7 +10,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { AILoadingIndicator } from "@/components/ui/loading-spinner";
 import { Badge } from "@/components/ui/badge";
-import { generateId } from "@/lib/utils";
 
 export default function WorkshopPage() {
   const router = useRouter();
@@ -132,7 +131,7 @@ export default function WorkshopPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <Textarea
-              placeholder="What's your observation? What's funny about this topic?"
+                placeholder="What&apos;s your observation? What&apos;s funny about this topic?"
               value={premise}
               onChange={(e) => setPremise(e.target.value)}
               rows={4}
@@ -285,7 +284,7 @@ export default function WorkshopPage() {
               <Button onClick={handleSaveJoke} size="lg">
                 Save Joke
               </Button>
-              <Button variant="outline" onClick={() => router.push("/")}>
+              <Button variant="outline" onClick={() => router.push("/dashboard")}>
                 Cancel
               </Button>
             </div>

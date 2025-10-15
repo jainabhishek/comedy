@@ -95,6 +95,12 @@ export interface WeaknessReport {
   overallScore: number; // 0-100
 }
 
+export interface JokeImprovement {
+  setup: string;
+  punchline: string;
+  explanation: string;
+}
+
 export interface Weakness {
   type: "setup-too-long" | "unclear-punchline" | "weak-tag" | "timing" | "structure";
   description: string;
@@ -117,6 +123,14 @@ export interface FlowAnalysis {
   callbacks: CallbackOpportunity[];
   suggestions: RoutineSuggestion[];
   issues: FlowIssue[];
+}
+
+export interface RoutineJokeSummary {
+  id: string;
+  title: string;
+  energy: Joke["energy"];
+  type: Joke["type"];
+  estimatedTime: number;
 }
 
 export interface FlowIssue {

@@ -19,11 +19,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    async session({ session, user }) {
-      if (session.user) {
-        session.user.id = user.id;
+    async session({ session, token }) {
+      if (session.user && token?.sub) {
+        session.user.id = token.sub;
       }
       return session;
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        token.sub = user.id;
+      }
+      return token;
     },
     async redirect({ url, baseUrl }) {
       // If the URL is relative, allow it
@@ -43,7 +49,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     error: "/auth/error",
   },
   session: {
-    strategy: "database",
+    strategy: "jwt",
   },
   debug: process.env.NODE_ENV === "development",
 });

@@ -15,7 +15,6 @@ function isPublicPath(pathname: string) {
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
-
   const isAuthPage = pathname.startsWith("/auth/");
   const token = await getToken({
     req,
@@ -37,7 +36,10 @@ export async function middleware(req: NextRequest) {
 
   if (!token) {
     const signInUrl = new URL("/auth/signin", req.url);
-    signInUrl.searchParams.set("callbackUrl", pathname);
+    const search = req.nextUrl.search || "";
+    const hash = req.nextUrl.hash || "";
+    const callbackUrl = `${pathname}${search}${hash}`;
+    signInUrl.searchParams.set("callbackUrl", callbackUrl);
     return NextResponse.redirect(signInUrl);
   }
 

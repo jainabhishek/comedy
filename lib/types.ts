@@ -18,6 +18,40 @@ export interface JokeVersion {
   notes: string;
 }
 
+// Joke Structure Metadata
+export interface JokeStructurePart {
+  id: string;
+  label: string;
+  description: string;
+  allowsMultiple: boolean;
+}
+
+export interface JokeStructure {
+  id: string;
+  name: string;
+  summary: string;
+  example: string;
+  category: string;
+  parts: JokeStructurePart[];
+}
+
+export interface SelectedPartOption {
+  partId: string;
+  selected: string[];
+  customInputs?: string[];
+}
+
+export interface JokeStructureSelection {
+  structureId: string;
+  structureName: string;
+  parts: Array<{
+    partId: string;
+    label: string;
+    selected: string[];
+    customInputs?: string[];
+  }>;
+}
+
 // Performance - Practice/live performance data
 export interface Performance {
   id: string;
@@ -45,6 +79,8 @@ export interface Joke {
   versions: JokeVersion[]; // Version history
   performances: Performance[]; // Performance data
   notes: string;
+  structure?: JokeStructureSelection;
+  techniques?: ("irony-sarcasm" | "character-voice" | "benign-violation")[];
   createdAt: number;
   updatedAt: number;
 }

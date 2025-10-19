@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { formatDate, formatTime } from "@/lib/utils";
+import { getStructureById, getCategoryById } from "@/lib/structures";
 import type {
   Joke,
   JokeVersion,
@@ -362,6 +363,39 @@ export default function JokeEditor({ params }: { params: Promise<{ id: string }>
 
         {/* Sidebar */}
         <div className="space-y-6">
+          {/* Structure Info */}
+          {joke?.structure && (
+            <Card className="bg-muted/30">
+              <CardHeader>
+                <CardTitle className="text-base">Structure</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div>
+                  <p className="font-medium text-sm">{joke.structure.structureName}</p>
+                  {joke.structure.structureId && getStructureById(joke.structure.structureId) && (
+                    <Badge variant="outline" className="mt-2 text-xs">
+                      {getCategoryById(getStructureById(joke.structure.structureId)!.category)?.name || "Unknown Category"}
+                    </Badge>
+                  )}
+                </div>
+                {joke.techniques && joke.techniques.length > 0 && (
+                  <div>
+                    <p className="text-xs text-muted mb-2">Techniques:</p>
+                    <div className="flex flex-wrap gap-1">
+                      {joke.techniques.map((technique) => (
+                        <Badge key={technique} variant="secondary" className="text-xs">
+                          {technique === "irony-sarcasm" ? "Irony/Sarcasm" : 
+                           technique === "character-voice" ? "Character Voice" : 
+                           "Benign Violation"}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          )}
+
           {/* Metadata */}
           <Card>
             <CardHeader>

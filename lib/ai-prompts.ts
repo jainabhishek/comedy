@@ -1,3 +1,6 @@
+import type { SelectedPartOption } from "./types";
+import { getStructureById } from "./structures";
+
 // System Prompts with Guardrails
 
 export const SYSTEM_PROMPTS = {
@@ -207,6 +210,92 @@ Each punchline should:
 
 Return ONLY a JSON array (no markdown, no code blocks):
 ["punchline 1", "punchline 2", "punchline 3", "punchline 4", "punchline 5"]`;
+}
+
+function formatPriorSelections(
+  structureId: string,
+  priorSelections: SelectedPartOption[]
+): string {
+  if (priorSelections.length === 0) {
+    return "No prior parts have been finalized yet.";
+  }
+
+  const structure = getStructureById(structureId);
+  if (!structure) {
+    return "Unknown structure context.";
+  }
+
+  const partsById = new Map(structure.parts.map((part) => [part.id, part.label] as const));
+
+  const descriptions = priorSelections
+    .map((selection) => {
+      const label = partsById.get(selection.partId) ?? selection.partId;
+      const combined = [...selection.selected];
+      if (selection.customInputs) {
+        combined.push(...selection.customInputs);
+      }
+      const detail = combined.length > 0 ? combined.join(" | ") : "(no choice yet)";
+      return `${label}: ${detail}`;
+    })
+    .join("\n");
+
+  return `Previously locked parts:\n${descriptions}`;
+}
+
+export function buildStructurePartPrompt(params: {
+  structureId: string;
+  partId: string;
+  premise: string;
+  priorSelections: SelectedPartOption[];
+  techniques?: ("irony-sarcasm" | "character-voice" | "benign-violation")[];
+}): string {
+  const structure = getStructureById(params.structureId);
+  if (!structure) {
+    throw new Error(`Unknown structure: ${params.structureId}`);
+  }
+
+  const part = structure.parts.find((p) => p.id === params.partId);
+  if (!part) {
+    throw new Error(`Unknown part ${params.partId} for structure ${structure.id}`);
+  }
+
+  const priorDescription = formatPriorSelections(
+    structure.id,
+    params.priorSelections.filter((selection) => selection.partId !== part.id)
+  );
+
+  // Add structure example for context
+  const exampleContext = structure.example 
+    ? `\nStructure Example: "${structure.example}"\nUse this as inspiration for the style and approach.`
+    : "";
+
+  // Add technique guidance if applicable
+  let techniqueGuidance = "";
+  if (params.techniques && params.techniques.length > 0) {
+    const techniqueDescriptions = {
+      "irony-sarcasm": "Use an ironic or sarcastic tone - say the opposite of what you mean for comedic effect.",
+      "character-voice": "Consider using different character voices or personas for contrast.",
+      "benign-violation": "Tease boundaries mindfully - push limits while keeping it relatable and safe."
+    };
+    
+    const applicableTechniques = params.techniques
+      .map(tech => techniqueDescriptions[tech])
+      .join(" ");
+    
+    techniqueGuidance = `\n\nTechnique Overlays: ${applicableTechniques}`;
+  }
+
+  return `Premise: "${params.premise}"
+
+Structure: ${structure.name}
+Current Part: ${part.label} — ${part.description}${exampleContext}
+
+${priorDescription}${techniqueGuidance}
+
+Generate 3 original options for the part "${part.label}" that fit naturally with the premise and any prior parts. Keep each option punchy (1-2 sentences). At least one option should escalate the stakes; another should explore a different comedic angle or tone.
+
+Return ONLY a JSON array (no markdown, no code blocks):
+["option 1", "option 2", "option 3"]`;
 }
 
 export function improveJokePrompt(

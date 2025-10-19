@@ -8,67 +8,57 @@ import type {
   PerformanceInsights,
   JokeImprovement,
   RoutineJokeSummary,
+  SelectedPartOption,
 } from "@/lib/types";
 
 export function useAI() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [loadingPartId, setLoadingPartId] = useState<string | null>(null);
 
-  // Generate setups from premise
-  const generateSetups = useCallback(async (premise: string): Promise<string[]> => {
-    setLoading(true);
-    setError(null);
+  const generatePartOptions = useCallback(
+    async (params: {
+      structureId: string;
+      partId: string;
+      premise: string;
+      priorSelections: SelectedPartOption[];
+    }): Promise<{ suggestions: string[]; source?: string }> => {
+      setLoading(true);
+      setLoadingPartId(params.partId);
+      setError(null);
 
-    try {
-      const response = await fetch("/api/joke/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type: "setup", content: premise }),
-      });
+      try {
+        const response = await fetch("/api/joke/generate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            type: "structure-part",
+            structureId: params.structureId,
+            partId: params.partId,
+            premise: params.premise,
+            priorSelections: params.priorSelections,
+          }),
+        });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to generate setups");
+        if (!response.ok) {
+          const error = await response.json();
+          const reason = typeof error.detail === "string" ? ` (${error.detail})` : "";
+          throw new Error(error.error ? `${error.error}${reason}` : "Failed to generate options");
+        }
+
+        const data: { suggestions: string[]; source?: string } = await response.json();
+        return data;
+      } catch (err) {
+        const message = err instanceof Error ? err.message : "Unknown error";
+        setError(message);
+        throw err;
+      } finally {
+        setLoading(false);
+        setLoadingPartId(null);
       }
-
-      const data: { suggestions: string[] } = await response.json();
-      return data.suggestions;
-    } catch (err) {
-      const message = err instanceof Error ? err.message : "Unknown error";
-      setError(message);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  // Generate punchlines from setup
-  const generatePunchlines = useCallback(async (setup: string): Promise<string[]> => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const response = await fetch("/api/joke/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type: "punchline", content: setup }),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to generate punchlines");
-      }
-
-      const data: { suggestions: string[] } = await response.json();
-      return data.suggestions;
-    } catch (err) {
-      const message = err instanceof Error ? err.message : "Unknown error";
-      setError(message);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    },
+    []
+  );
 
   // Improve joke
   const improveJoke = useCallback(
@@ -317,8 +307,8 @@ export function useAI() {
   return {
     loading,
     error,
-    generateSetups,
-    generatePunchlines,
+    loadingPartId,
+    generatePartOptions,
     improveJoke,
     analyzeJoke,
     suggestTags,

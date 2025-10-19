@@ -1,32 +1,46 @@
-import { auth } from "@/auth";
+import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
 
-export default auth((req) => {
-  const isLoggedIn = !!req.auth;
+const PUBLIC_PATHS = ["/", "/favicon.ico"];
+const PUBLIC_PREFIXES = ["/api/auth/", "/_next/"];
+
+function isPublicPath(pathname: string) {
+  if (PUBLIC_PATHS.includes(pathname)) {
+    return true;
+  }
+
+  return PUBLIC_PREFIXES.some((prefix) => pathname.startsWith(prefix));
+}
+
+export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // Public paths that don't require authentication
-  const isPublicPath =
-    pathname === "/" ||
-    pathname.startsWith("/auth/") ||
-    pathname.startsWith("/api/auth/") ||
-    pathname.startsWith("/_next") ||
-    pathname.startsWith("/favicon.ico");
+  const isAuthPage = pathname.startsWith("/auth/");
+  const token = await getToken({
+    req,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
 
-  // If not logged in and trying to access protected route, redirect to sign in
-  if (!isLoggedIn && !isPublicPath) {
+  if (isAuthPage) {
+    if (token) {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
+    return NextResponse.next();
+  }
+
+  if (isPublicPath(pathname)) {
+    return NextResponse.next();
+  }
+
+  if (!token) {
     const signInUrl = new URL("/auth/signin", req.url);
     signInUrl.searchParams.set("callbackUrl", pathname);
     return NextResponse.redirect(signInUrl);
   }
 
-  // If logged in and trying to access sign in page, redirect to dashboard
-  if (isLoggedIn && pathname.startsWith("/auth/signin")) {
-    return NextResponse.redirect(new URL("/", req.url));
-  }
-
   return NextResponse.next();
-});
+}
 
 export const config = {
   matcher: [
@@ -40,4 +54,3 @@ export const config = {
     "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };
-

@@ -3,22 +3,22 @@ import { Button } from "@/components/ui/button";
 
 export default function HomePage() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-white to-gray-50 px-4">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4">
       {/* Logo/Brand */}
       <div className="mb-8 text-center">
         <div className="text-6xl mb-4 floating">🎤</div>
-        <h2 className="text-2xl font-bold tracking-tight text-gray-900">Tight 5</h2>
+        <h2 className="text-2xl font-bold tracking-tight text-foreground">Tight 5</h2>
       </div>
 
       {/* Hero Section */}
       <div className="max-w-4xl text-center">
-        <h1 className="mb-6 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
+        <h1 className="mb-6 text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
           Build Your Tightest
           <br />
           Five Minutes
         </h1>
 
-        <p className="mb-10 text-lg text-gray-600 sm:text-xl lg:text-2xl">
+        <p className="mb-10 text-lg text-muted sm:text-xl lg:text-2xl">
           AI-powered comedy writing platform for standup comedians
         </p>
 
@@ -40,20 +40,20 @@ export default function HomePage() {
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
           <div className="flex flex-col items-center gap-2">
             <span className="text-4xl">⚡️</span>
-            <h3 className="font-semibold text-gray-900">Quick Writing</h3>
-            <p className="text-sm text-gray-600">Generate jokes in seconds</p>
+            <h3 className="font-semibold text-foreground">Quick Writing</h3>
+            <p className="text-sm text-muted">Generate jokes in seconds</p>
           </div>
 
           <div className="flex flex-col items-center gap-2">
             <span className="text-4xl">🎯</span>
-            <h3 className="font-semibold text-gray-900">Smart Routines</h3>
-            <p className="text-sm text-gray-600">Build perfect 5-minute sets</p>
+            <h3 className="font-semibold text-foreground">Smart Routines</h3>
+            <p className="text-sm text-muted">Build perfect 5-minute sets</p>
           </div>
 
           <div className="flex flex-col items-center gap-2">
             <span className="text-4xl">📊</span>
-            <h3 className="font-semibold text-gray-900">Track Performance</h3>
-            <p className="text-sm text-gray-600">Optimize with insights</p>
+            <h3 className="font-semibold text-foreground">Track Performance</h3>
+            <p className="text-sm text-muted">Optimize with insights</p>
           </div>
         </div>
       </div>

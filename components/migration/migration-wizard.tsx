@@ -116,12 +116,12 @@ export function MigrationWizard({ onComplete }: MigrationWizardProps) {
           <div key={s} className="flex items-center">
             <div
               className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold ${
-                s <= step ? "bg-primary text-white" : "bg-gray-200 text-gray-500"
+                s <= step ? "bg-primary text-white" : "bg-muted-bg text-muted"
               }`}
             >
               {s}
             </div>
-            {s < 5 && <div className={`w-16 h-1 ${s < step ? "bg-primary" : "bg-gray-200"}`} />}
+            {s < 5 && <div className={`w-16 h-1 ${s < step ? "bg-primary" : "bg-muted-bg"}`} />}
           </div>
         ))}
       </div>

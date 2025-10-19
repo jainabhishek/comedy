@@ -236,7 +236,7 @@ export default function RoutineBuilder({ params }: { params: Promise<{ id: strin
                   </span>
                   <span className="text-sm text-muted">{routineJokes.length} jokes</span>
                 </div>
-                <div className="w-full h-4 bg-gray-200 rounded-full overflow-hidden">
+                <div className="w-full h-4 bg-muted-bg rounded-full overflow-hidden">
                   <div
                     className={`h-full transition-all ${
                       timePercent > 100
@@ -278,7 +278,7 @@ export default function RoutineBuilder({ params }: { params: Promise<{ id: strin
                     {flowAnalysis.suggestions.slice(0, 3).map((suggestion, index) => (
                       <div
                         key={`${suggestion.type}-${index}`}
-                        className="text-sm p-2 bg-white rounded border"
+                        className="text-sm p-2 glass rounded border border-border"
                       >
                         <p className="font-medium">{suggestion.type}</p>
                         <p className="text-muted">{suggestion.reason}</p>
@@ -336,7 +336,7 @@ export default function RoutineBuilder({ params }: { params: Promise<{ id: strin
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
-                                className={`p-3 bg-white border rounded-lg cursor-move hover:shadow-md transition-shadow ${
+                                className={`p-3 glass border border-border rounded-lg cursor-move hover:shadow-md transition-shadow ${
                                   snapshot.isDragging ? "shadow-lg ring-2 ring-primary" : ""
                                 }`}
                               >
@@ -399,7 +399,7 @@ export default function RoutineBuilder({ params }: { params: Promise<{ id: strin
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
-                                className={`p-3 bg-white border rounded-lg cursor-move hover:shadow-md transition-shadow ${
+                                className={`p-3 glass border border-border rounded-lg cursor-move hover:shadow-md transition-shadow ${
                                   snapshot.isDragging ? "shadow-lg ring-2 ring-secondary" : ""
                                 }`}
                               >

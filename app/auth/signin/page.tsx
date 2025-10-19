@@ -21,7 +21,7 @@ export default function SignIn() {
         {/* Logo/Header */}
         <div className="text-center">
           <div className="text-6xl mb-4 floating">🎤</div>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900 mb-2">Tight 5</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground mb-2">Tight 5</h1>
           <p className="text-muted text-lg">AI-Powered Comedy Writing</p>
         </div>
 

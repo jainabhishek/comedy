@@ -342,7 +342,7 @@ export default function JokeEditor({ params }: { params: Promise<{ id: string }>
                       {aiAnalysis.weaknesses.map((weakness: Weakness, index) => (
                         <div
                           key={`${weakness.type}-${index}`}
-                          className="text-sm p-2 bg-white rounded border"
+                          className="text-sm p-2 glass rounded border border-border"
                         >
                           <Badge
                             variant={weakness.severity === "high" ? "warning" : "outline"}
@@ -537,7 +537,7 @@ export default function JokeEditor({ params }: { params: Promise<{ id: string }>
                   joke.versions.map((version) => (
                     <div
                       key={version.id}
-                      className="p-3 border rounded-lg hover:bg-gray-50 cursor-pointer"
+                      className="p-3 border border-border rounded-lg hover:bg-muted-bg/50 cursor-pointer transition-colors"
                       onClick={() => restoreVersion(version)}
                     >
                       <p className="text-xs text-muted mb-1">{formatDate(version.createdAt)}</p>

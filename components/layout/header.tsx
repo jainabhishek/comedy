@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { UserMenu } from "@/components/auth/user-menu";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 export function Header() {
   const pathname = usePathname();
@@ -61,6 +62,7 @@ export function Header() {
                 AI-Powered Comedy Writing
               </span>
             )}
+            <ThemeToggle />
             {isHomepage && status !== "loading" && !session ? (
               <Link href="/auth/signin">
                 <Button size="sm" className="shadow-md">

@@ -1,11 +1,13 @@
 # Tight 5 Standup Routine Builder - Implementation Specification
 
 ## Overview
+
 An AI-powered web application that helps comedians develop jokes from premises, build their 5-minute standup routines, and track performance with intelligent suggestions and analysis.
 
 ## Tech Stack
 
 ### Frontend
+
 - **Framework**: Next.js 15 (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS v4
@@ -13,28 +15,33 @@ An AI-powered web application that helps comedians develop jokes from premises, 
 - **Drag & Drop**: @hello-pangea/dnd (react-beautiful-dnd successor)
 
 ### AI Integration
+
 - **Provider**: OpenAI GPT-5 API
 - **Usage Pattern**: Server-side API routes for security
 - **Guardrails**: Task-scoped system prompts + input validation
 
 ### Authentication (Phase 16 - Planned)
+
 - **Provider**: NextAuth.js v5 (Auth.js)
 - **Strategy**: Google OAuth 2.0
 - **Session Management**: JWT tokens + database sessions
 - **Protected Routes**: Middleware-based route protection
 
 ### Database (Phase 16 - Planned)
+
 - **Primary Database**: PostgreSQL (via Supabase or Vercel Postgres)
 - **ORM**: Prisma
 - **Schema**: Users, Jokes, Routines, Performances, Settings
 - **Migration**: One-time LocalStorage → Database sync
 
 ### State Management
+
 - **Local State**: React hooks (useState, useReducer)
 - **Global State**: Context API for user preferences, auth state
 - **Server State**: React Query / SWR for data fetching & caching
 
 ### Data Storage
+
 - **MVP (Current)**: LocalStorage (JSON serialization)
 - **Phase 16 (Planned)**: PostgreSQL with user-scoped data
 - **Export**: JSON, TXT, PDF (using jsPDF)
@@ -43,6 +50,7 @@ An AI-powered web application that helps comedians develop jokes from premises, 
 ## Architecture
 
 ### Folder Structure
+
 ```
 comedy/
 ├── app/                          # Next.js app directory
@@ -97,16 +105,16 @@ interface Premise {
 // Joke - Complete joke with all variations
 interface Joke {
   id: string;
-  premiseId?: string;          // Link to original premise
-  title: string;               // Short description
-  setup: string;               // Joke setup
-  punchline: string;           // Main punchline
-  tags: string[];              // Callbacks, toppers, act-outs
-  estimatedTime: number;       // Seconds
-  energy: 'low' | 'medium' | 'high';
-  type: 'observational' | 'one-liner' | 'story' | 'callback' | 'crowd-work';
-  status: 'draft' | 'working' | 'polished' | 'retired';
-  versions: JokeVersion[];     // Version history
+  premiseId?: string; // Link to original premise
+  title: string; // Short description
+  setup: string; // Joke setup
+  punchline: string; // Main punchline
+  tags: string[]; // Callbacks, toppers, act-outs
+  estimatedTime: number; // Seconds
+  energy: "low" | "medium" | "high";
+  type: "observational" | "one-liner" | "story" | "callback" | "crowd-work";
+  status: "draft" | "working" | "polished" | "retired";
+  versions: JokeVersion[]; // Version history
   performances: Performance[]; // Performance data
   notes: string;
   createdAt: number;
@@ -127,10 +135,10 @@ interface JokeVersion {
 interface Routine {
   id: string;
   name: string;
-  jokeIds: string[];           // Ordered list
-  targetTime: number;          // Default: 300 seconds (5 min)
-  currentTime: number;         // Calculated from jokes
-  flowScore?: number;          // AI-calculated 0-100
+  jokeIds: string[]; // Ordered list
+  targetTime: number; // Default: 300 seconds (5 min)
+  currentTime: number; // Calculated from jokes
+  flowScore?: number; // AI-calculated 0-100
   aiSuggestions?: RoutineSuggestion[];
   createdAt: number;
   updatedAt: number;
@@ -138,11 +146,11 @@ interface Routine {
 
 // RoutineSuggestion - AI placement suggestions
 interface RoutineSuggestion {
-  type: 'placement' | 'callback' | 'reorder' | 'remove';
+  type: "placement" | "callback" | "reorder" | "remove";
   jokeId: string;
   position?: number;
   reason: string;
-  confidence: number;          // 0-100
+  confidence: number; // 0-100
 }
 
 // Performance - Practice/live performance data
@@ -151,8 +159,8 @@ interface Performance {
   jokeId: string;
   routineId?: string;
   date: number;
-  actualTime: number;          // Seconds
-  outcome: 'killed' | 'worked' | 'bombed' | 'neutral';
+  actualTime: number; // Seconds
+  outcome: "killed" | "worked" | "bombed" | "neutral";
   notes: string;
   venue?: string;
 }
@@ -160,14 +168,14 @@ interface Performance {
 // ChatHistory - AI conversation per joke/routine
 interface ChatHistory {
   id: string;
-  entityId: string;            // jokeId or routineId
-  entityType: 'joke' | 'routine';
+  entityId: string; // jokeId or routineId
+  entityType: "joke" | "routine";
   messages: ChatMessage[];
   createdAt: number;
 }
 
 interface ChatMessage {
-  role: 'user' | 'assistant';
+  role: "user" | "assistant";
   content: string;
   timestamp: number;
 }
@@ -181,20 +189,23 @@ interface ChatMessage {
 // lib/ai-service.ts
 class AIService {
   // Guardrails
-  private validateInput(input: string, context: AIContext): boolean
-  private enforceGuardrails(prompt: string, context: AIContext): string
+  private validateInput(input: string, context: AIContext): boolean;
+  private enforceGuardrails(prompt: string, context: AIContext): string;
 
   // Core AI functions
-  async generateSetupFromPremise(premise: string): Promise<string[]>
-  async generatePunchlines(setup: string): Promise<string[]>
-  async improvePunchline(setup: string, punchline: string, direction: string): Promise<string>
-  async suggestTags(setup: string, punchline: string): Promise<string[]>
-  async analyzeJokeWeaknesses(joke: Joke): Promise<WeaknessReport>
-  async suggestJokePlacement(routine: Routine, joke: Joke): Promise<PlacementSuggestion[]>
-  async analyzeRoutineFlow(routine: Routine, jokes: Joke[]): Promise<FlowAnalysis>
-  async identifyCallbacks(jokes: Joke[]): Promise<CallbackOpportunity[]>
-  async optimizeRoutineOrder(routine: Routine, jokes: Joke[]): Promise<string[]>
-  async analyzePerformancePatterns(performances: Performance[], jokes: Joke[]): Promise<PerformanceInsights>
+  async generateSetupFromPremise(premise: string): Promise<string[]>;
+  async generatePunchlines(setup: string): Promise<string[]>;
+  async improvePunchline(setup: string, punchline: string, direction: string): Promise<string>;
+  async suggestTags(setup: string, punchline: string): Promise<string[]>;
+  async analyzeJokeWeaknesses(joke: Joke): Promise<WeaknessReport>;
+  async suggestJokePlacement(routine: Routine, joke: Joke): Promise<PlacementSuggestion[]>;
+  async analyzeRoutineFlow(routine: Routine, jokes: Joke[]): Promise<FlowAnalysis>;
+  async identifyCallbacks(jokes: Joke[]): Promise<CallbackOpportunity[]>;
+  async optimizeRoutineOrder(routine: Routine, jokes: Joke[]): Promise<string[]>;
+  async analyzePerformancePatterns(
+    performances: Performance[],
+    jokes: Joke[]
+  ): Promise<PerformanceInsights>;
 }
 ```
 
@@ -220,15 +231,15 @@ const SYSTEM_PROMPTS = {
     - ONLY analyze performance data and joke effectiveness
     - Identify what works and what doesn't
     - Stay within standup comedy domain
-    - Do not provide personal advice`
+    - Do not provide personal advice`,
 };
 
 // Input validation
 function validateComedyInput(input: string): boolean {
   // Reject clearly off-topic requests
-  const offTopicKeywords = ['weather', 'recipe', 'medical', 'legal'];
+  const offTopicKeywords = ["weather", "recipe", "medical", "legal"];
   // Allow comedy-related terms
-  const comedyKeywords = ['joke', 'premise', 'punchline', 'setup', 'funny', 'laugh'];
+  const comedyKeywords = ["joke", "premise", "punchline", "setup", "funny", "laugh"];
   // Implement validation logic
 }
 ```
@@ -240,6 +251,7 @@ function validateComedyInput(input: string): boolean {
 **Purpose**: Guide user from premise to complete joke
 
 **UI Flow**:
+
 1. Enter premise (textarea)
 2. AI generates 3 setup variations → user selects or edits
 3. AI generates 5 punchline options → user selects or edits
@@ -248,6 +260,7 @@ function validateComedyInput(input: string): boolean {
 6. Save joke
 
 **Components**:
+
 - `WorkshopStepper` - Progress indicator
 - `PremiseInput` - Textarea with character count
 - `SetupSelector` - Cards with AI suggestions + custom input
@@ -256,6 +269,7 @@ function validateComedyInput(input: string): boolean {
 - `JokeMetadata` - Form for timing, energy, type
 
 **AI Integration**:
+
 - `POST /api/joke/generate` - Generate setups from premise
 - `POST /api/joke/generate` - Generate punchlines from setup
 - `POST /api/joke/analyze` - Suggest tags and improvements
@@ -265,12 +279,14 @@ function validateComedyInput(input: string): boolean {
 **Purpose**: Edit and refine existing jokes
 
 **UI Components**:
+
 - Rich text editor (setup/punchline sections)
 - Version history sidebar
 - Performance data panel
 - AI suggestion panel
 
 **Features**:
+
 - Inline editing with formatting
 - "Punch up" button → AI improves joke
 - Weakness highlights (underline with tooltips)
@@ -279,6 +295,7 @@ function validateComedyInput(input: string): boolean {
 - Notes section
 
 **AI Integration**:
+
 - `POST /api/joke/improve` - Enhance joke with AI
 - `POST /api/joke/analyze` - Identify weaknesses
 
@@ -287,11 +304,13 @@ function validateComedyInput(input: string): boolean {
 **Purpose**: Arrange jokes into 5-minute routine
 
 **UI Layout**:
+
 - Left panel: Joke bank (all available jokes)
 - Right panel: Current routine (ordered list)
 - Bottom: Timeline visualization
 
 **Features**:
+
 - Drag-and-drop jokes between panels
 - Visual timeline with 5-minute marker
 - Energy arc graph
@@ -300,6 +319,7 @@ function validateComedyInput(input: string): boolean {
 - "Optimize" button → AI reorders
 
 **Components**:
+
 - `JokeBank` - Filterable list of jokes
 - `RoutinePanel` - Droppable area with ordered jokes
 - `Timeline` - Visual time representation
@@ -307,6 +327,7 @@ function validateComedyInput(input: string): boolean {
 - `CallbackLines` - SVG connections between related jokes
 
 **AI Integration**:
+
 - `POST /api/routine/analyze` - Calculate flow score, identify callbacks
 - `POST /api/routine/optimize` - Suggest optimal order
 
@@ -317,12 +338,14 @@ function validateComedyInput(input: string): boolean {
 **Trigger**: When dragging joke over routine
 
 **UI**:
+
 - Modal with routine preview
 - Top 3 placement suggestions (cards)
 - Visual indicators on timeline
 - Reasoning for each suggestion
 
 **AI Integration**:
+
 - `POST /api/routine/analyze` - Analyze all possible placements
 
 ### 5. Performance Mode
@@ -330,6 +353,7 @@ function validateComedyInput(input: string): boolean {
 **Purpose**: Practice routine with timer
 
 **UI**:
+
 - Full-screen mode
 - Large timer (countdown from 5:00)
 - Current joke display
@@ -337,11 +361,13 @@ function validateComedyInput(input: string): boolean {
 - Quick feedback buttons
 
 **Post-Performance**:
+
 - AI analysis report
 - Timing comparison (estimated vs actual)
 - Suggested improvements
 
 **AI Integration**:
+
 - `POST /api/performance/analyze` - Analyze performance patterns
 
 ### 6. Dashboard
@@ -349,6 +375,7 @@ function validateComedyInput(input: string): boolean {
 **Purpose**: Browse and organize jokes
 
 **UI**:
+
 - Grid of joke cards
 - Search bar (semantic search)
 - Filter chips (tags, status, energy)
@@ -356,6 +383,7 @@ function validateComedyInput(input: string): boolean {
 - Quick actions (edit, delete, add to routine)
 
 **AI Integration**:
+
 - Semantic search using embeddings
 - "Similar jokes" suggestions
 
@@ -400,29 +428,29 @@ Response: { optimizedOrder: string[], reasoning: string }
 // lib/storage.ts
 class StorageService {
   // Jokes
-  saveJoke(joke: Joke): void
-  getJoke(id: string): Joke | null
-  getAllJokes(): Joke[]
-  deleteJoke(id: string): void
+  saveJoke(joke: Joke): void;
+  getJoke(id: string): Joke | null;
+  getAllJokes(): Joke[];
+  deleteJoke(id: string): void;
 
   // Routines
-  saveRoutine(routine: Routine): void
-  getRoutine(id: string): Routine | null
-  getAllRoutines(): Routine[]
-  deleteRoutine(id: string): void
+  saveRoutine(routine: Routine): void;
+  getRoutine(id: string): Routine | null;
+  getAllRoutines(): Routine[];
+  deleteRoutine(id: string): void;
 
   // Performances
-  savePerformance(performance: Performance): void
-  getPerformancesByJoke(jokeId: string): Performance[]
-  getPerformancesByRoutine(routineId: string): Performance[]
+  savePerformance(performance: Performance): void;
+  getPerformancesByJoke(jokeId: string): Performance[];
+  getPerformancesByRoutine(routineId: string): Performance[];
 
   // Export/Import
-  exportData(): string // JSON string
-  importData(jsonString: string): void
+  exportData(): string; // JSON string
+  importData(jsonString: string): void;
 
   // Backup
-  createBackup(): void
-  restoreBackup(backupId: string): void
+  createBackup(): void;
+  restoreBackup(backupId: string): void;
 }
 ```
 
@@ -431,49 +459,67 @@ class StorageService {
 ```typescript
 // hooks/useJokes.ts
 function useJokes() {
-  const [jokes, setJokes] = useState<Joke[]>([])
+  const [jokes, setJokes] = useState<Joke[]>([]);
 
-  const createJoke = (joke: Omit<Joke, 'id' | 'createdAt' | 'updatedAt'>) => { }
-  const updateJoke = (id: string, updates: Partial<Joke>) => { }
-  const deleteJoke = (id: string) => { }
-  const getJoke = (id: string) => { }
+  const createJoke = (joke: Omit<Joke, "id" | "createdAt" | "updatedAt">) => {};
+  const updateJoke = (id: string, updates: Partial<Joke>) => {};
+  const deleteJoke = (id: string) => {};
+  const getJoke = (id: string) => {};
 
-  return { jokes, createJoke, updateJoke, deleteJoke, getJoke }
+  return { jokes, createJoke, updateJoke, deleteJoke, getJoke };
 }
 
 // hooks/useRoutines.ts
 function useRoutines() {
-  const [routines, setRoutines] = useState<Routine[]>([])
+  const [routines, setRoutines] = useState<Routine[]>([]);
 
-  const createRoutine = (routine: Omit<Routine, 'id' | 'createdAt' | 'updatedAt'>) => { }
-  const updateRoutine = (id: string, updates: Partial<Routine>) => { }
-  const deleteRoutine = (id: string) => { }
-  const addJokeToRoutine = (routineId: string, jokeId: string, position?: number) => { }
-  const removeJokeFromRoutine = (routineId: string, jokeId: string) => { }
-  const reorderJokes = (routineId: string, jokeIds: string[]) => { }
+  const createRoutine = (routine: Omit<Routine, "id" | "createdAt" | "updatedAt">) => {};
+  const updateRoutine = (id: string, updates: Partial<Routine>) => {};
+  const deleteRoutine = (id: string) => {};
+  const addJokeToRoutine = (routineId: string, jokeId: string, position?: number) => {};
+  const removeJokeFromRoutine = (routineId: string, jokeId: string) => {};
+  const reorderJokes = (routineId: string, jokeIds: string[]) => {};
 
-  return { routines, createRoutine, updateRoutine, deleteRoutine, addJokeToRoutine, removeJokeFromRoutine, reorderJokes }
+  return {
+    routines,
+    createRoutine,
+    updateRoutine,
+    deleteRoutine,
+    addJokeToRoutine,
+    removeJokeFromRoutine,
+    reorderJokes,
+  };
 }
 
 // hooks/useAI.ts
 function useAI() {
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const generateSetups = async (premise: string) => { }
-  const generatePunchlines = async (setup: string) => { }
-  const improveJoke = async (joke: Joke, direction: string) => { }
-  const analyzeJoke = async (joke: Joke) => { }
-  const analyzeRoutine = async (routine: Routine, jokes: Joke[]) => { }
-  const optimizeRoutine = async (routine: Routine, jokes: Joke[]) => { }
+  const generateSetups = async (premise: string) => {};
+  const generatePunchlines = async (setup: string) => {};
+  const improveJoke = async (joke: Joke, direction: string) => {};
+  const analyzeJoke = async (joke: Joke) => {};
+  const analyzeRoutine = async (routine: Routine, jokes: Joke[]) => {};
+  const optimizeRoutine = async (routine: Routine, jokes: Joke[]) => {};
 
-  return { loading, error, generateSetups, generatePunchlines, improveJoke, analyzeJoke, analyzeRoutine, optimizeRoutine }
+  return {
+    loading,
+    error,
+    generateSetups,
+    generatePunchlines,
+    improveJoke,
+    analyzeJoke,
+    analyzeRoutine,
+    optimizeRoutine,
+  };
 }
 ```
 
 ## UI Component Library
 
 ### Base Components (shadcn/ui + custom)
+
 - Button
 - Input / Textarea
 - Card
@@ -486,6 +532,7 @@ function useAI() {
 - Toast / Notification
 
 ### Custom Components
+
 - JokeCard - Display joke summary
 - RoutineCard - Display routine summary
 - Timeline - Visual time representation
@@ -498,6 +545,7 @@ function useAI() {
 ## Performance Considerations
 
 ### Optimization Strategies
+
 1. **Code Splitting**: Lazy load routes and heavy components
 2. **Memoization**: Use React.memo for joke/routine cards
 3. **Virtualization**: For long lists of jokes (react-window)
@@ -506,6 +554,7 @@ function useAI() {
 6. **AI Caching**: Cache AI responses for same inputs
 
 ### Loading States
+
 - Skeleton screens for initial loads
 - Progressive loading for AI suggestions
 - Optimistic updates for user actions
@@ -513,27 +562,32 @@ function useAI() {
 ## Error Handling
 
 ### AI Errors
+
 - Rate limiting: Show user-friendly message, suggest retry
 - API failures: Fallback to manual input
 - Invalid responses: Log and show generic error
 
 ### Storage Errors
+
 - LocalStorage full: Prompt to export/delete old data
 - Parse errors: Attempt recovery, offer backup restore
 
 ### Network Errors
+
 - Offline detection: Show offline banner
 - Retry logic with exponential backoff
 
 ## Security Considerations
 
 ### API Routes
+
 - Rate limiting per user session
 - Input validation and sanitization
 - OpenAI API key stored in env variables
 - No user authentication (single-user app)
 
 ### Data Privacy
+
 - All data stored locally
 - No server-side storage
 - Export data is user-controlled
@@ -554,34 +608,40 @@ function useAI() {
 ## Testing Strategy
 
 ### Unit Tests
+
 - Utility functions
 - Data model validations
 - Storage service methods
 
 ### Integration Tests
+
 - API routes with mocked OpenAI
 - Component interactions
 - State management
 
 ### E2E Tests (Optional)
+
 - User flows through Playwright
 - Critical paths: create joke → add to routine → perform
 
 ## Deployment
 
 ### Environment Variables
+
 ```
 OPENAI_API_KEY=sk-...
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
 ### Build & Deploy
+
 ```bash
 npm run build
 npm run start
 ```
 
 ### Hosting Options
+
 - Vercel (recommended for Next.js)
 - Netlify
 - Self-hosted
@@ -602,6 +662,7 @@ npm run start
 ## Phase 0: Project Setup ⚙️
 
 ### Environment Setup
+
 - [x] Initialize Next.js 14 project with TypeScript
   ```bash
   npx create-next-app@latest comedy --typescript --tailwind --app --no-src-dir
@@ -621,6 +682,7 @@ npm run start
 - [x] Create `.gitignore` with appropriate entries
 
 ### Development Tools
+
 - [x] Set up ESLint and Prettier
 - [ ] Configure VS Code settings (optional)
 - [ ] Install recommended VS Code extensions
@@ -630,6 +692,7 @@ npm run start
 ## Phase 1: Core Data Layer 📊
 
 ### Type Definitions
+
 - [x] Create `lib/types.ts`
   - [x] Define `Premise` interface
   - [x] Define `Joke` interface
@@ -642,6 +705,7 @@ npm run start
   - [x] Define utility types (WeaknessReport, FlowAnalysis, etc.)
 
 ### Storage Service
+
 - [x] Create `lib/storage.ts`
   - [x] Implement `StorageService` class
   - [x] Add joke CRUD methods
@@ -653,6 +717,7 @@ npm run start
   - [ ] Write unit tests for storage service
 
 ### Utility Functions
+
 - [x] Create `lib/utils.ts`
   - [x] ID generation (using nanoid)
   - [x] Date formatting helpers
@@ -665,6 +730,7 @@ npm run start
 ## Phase 2: AI Integration Layer 🤖
 
 ### AI Configuration
+
 - [x] Create `lib/ai-prompts.ts`
   - [x] Define system prompts for joke generation
   - [x] Define system prompts for routine analysis
@@ -673,6 +739,7 @@ npm run start
   - [x] Add guardrail validation logic
 
 ### AI Service
+
 - [x] AI service implemented via hooks (useAI)
   - [x] Add input validation with guardrails
   - [x] Implement joke generation methods
@@ -684,6 +751,7 @@ npm run start
   - [ ] Add request caching (optional)
 
 ### API Routes
+
 - [x] Create `app/api/joke/generate/route.ts`
   - [x] Handle setup generation
   - [x] Handle punchline generation
@@ -709,6 +777,7 @@ npm run start
 ## Phase 3: Custom Hooks 🎣
 
 ### Data Hooks
+
 - [x] Create `hooks/useLocalStorage.ts`
   - [x] Generic hook for syncing state with LocalStorage
   - [x] Handle JSON serialization/deserialization
@@ -729,6 +798,7 @@ npm run start
   - [x] Query methods (by joke, by routine)
 
 ### AI Hooks
+
 - [x] Create `hooks/useAI.ts`
   - [x] Wrapper for AI API calls
   - [x] Loading states
@@ -738,6 +808,7 @@ npm run start
   - [ ] Streaming responses for better UX
 
 ### UI Hooks
+
 - [x] Create `hooks/useDebounce.ts`
   - [x] Debounce user input for search/AI
 - [x] Create `hooks/useTimer.ts`
@@ -748,6 +819,7 @@ npm run start
 ## Phase 4: UI Component Library 🎨
 
 ### Base Components (custom implementation)
+
 - [x] Custom UI components built (shadcn/ui not used)
 - [x] Add Button component
 - [x] Add Input component
@@ -763,6 +835,7 @@ npm run start
 - [ ] Add Tabs component (future)
 
 ### Custom Components - Shared
+
 - [x] Create `components/ui/loading-spinner.tsx`
 - [x] Create `components/ui/ai-loading-indicator.tsx`
   - [x] Special loading animation for AI operations
@@ -775,6 +848,7 @@ npm run start
 - [ ] Create `components/layout/sidebar.tsx` (optional - future)
 
 ### Custom Components - Joke
+
 - [ ] Create `components/joke/joke-card.tsx`
   - [ ] Display joke summary
   - [ ] Action buttons (edit, delete, add to routine)
@@ -785,6 +859,7 @@ npm run start
   - [ ] Drag preview
 
 ### Custom Components - Routine
+
 - [ ] Create `components/routine/routine-card.tsx`
   - [ ] Display routine summary
   - [ ] Time indicator
@@ -800,6 +875,7 @@ npm run start
   - [ ] SVG lines connecting related jokes
 
 ### Custom Components - AI
+
 - [ ] Create `components/ai/ai-suggestion-card.tsx`
   - [ ] Display AI suggestion with confidence
   - [ ] Accept/reject buttons
@@ -811,6 +887,7 @@ npm run start
 ## Phase 5: Feature - Joke Workshop 🎭
 
 ### Components
+
 - [x] Components integrated directly in page (no separate component files)
   - [x] Progress indicator (steps 1-4)
   - [x] Step navigation
@@ -825,6 +902,7 @@ npm run start
   - [x] Notes field
 
 ### Page
+
 - [x] Create `app/workshop/page.tsx`
   - [x] Implement step-by-step flow (4 steps)
   - [x] State management for current step
@@ -833,6 +911,7 @@ npm run start
   - [x] Navigate to editor after save
 
 ### Testing
+
 - [x] Test complete flow from premise to joke
 - [x] Test AI generation at each step
 - [x] Test custom input options
@@ -843,6 +922,7 @@ npm run start
 ## Phase 6: Feature - Joke Editor ✏️ ✅ COMPLETED
 
 ### Components
+
 - [x] All components integrated directly in page (no separate component files)
   - [x] Setup editor (textarea with character count)
   - [x] Punchline editor (textarea with character count)
@@ -869,6 +949,7 @@ npm run start
   - [x] Notes textarea
 
 ### Page
+
 - [x] Create `app/editor/[id]/page.tsx`
   - [x] Load joke by ID with async params handling
   - [x] Responsive layout with main editor and sidebar
@@ -878,6 +959,7 @@ npm run start
   - [x] Back to dashboard navigation
 
 ### Testing
+
 - [x] Test editing and save functionality
 - [x] Test version history restore
 - [x] Test AI punch-up improvements
@@ -893,6 +975,7 @@ npm run start
 ## Phase 7: Feature - Routine Builder 🎯 ✅ COMPLETED
 
 ### Routines List Page (Completed)
+
 - [x] Create `app/routines/page.tsx`
   - [x] Display all routines in grid
   - [x] Show routine stats (jokes count, total time, flow score)
@@ -902,7 +985,9 @@ npm run start
   - [x] Navigate to routine builder
 
 ### Full Routine Builder ✅
+
 ### Components
+
 - [x] All components integrated directly in page
   - [x] Joke bank with search functionality
   - [x] List all available jokes (not in routine)
@@ -929,6 +1014,7 @@ npm run start
   - [x] Show callback opportunities
 
 ### Drag and Drop
+
 - [x] Set up @hello-pangea/dnd
   - [x] Create DragDropContext
   - [x] Implement onDragEnd handler
@@ -939,6 +1025,7 @@ npm run start
   - [x] Dashed border on drop zones
 
 ### Page
+
 - [x] Create `app/routine/[id]/page.tsx`
   - [x] Load routine by ID with async params handling
   - [x] Two-column layout (available jokes | routine)
@@ -949,6 +1036,7 @@ npm run start
   - [x] Back to routines navigation
 
 ### AI Integration
+
 - [x] Implement "Optimize Order" button
   - [x] Call AI to suggest optimal joke ordering
   - [x] Show AI reasoning
@@ -964,6 +1052,7 @@ npm run start
   - [x] Loading spinner with message
 
 ### Testing
+
 - [x] Test drag-and-drop between panels
 - [x] Test dragging from available to routine
 - [x] Test dragging from routine to available
@@ -982,6 +1071,7 @@ npm run start
 ## Phase 8: Feature - Smart Placement Assistant 🎯
 
 ### Components
+
 - [ ] Create `components/placement/placement-modal.tsx`
   - [ ] Modal triggered when adding joke
   - [ ] Show routine preview
@@ -996,12 +1086,14 @@ npm run start
   - [ ] Highlight suggested positions
 
 ### Integration
+
 - [ ] Integrate with routine builder
   - [ ] Trigger modal on joke add
   - [ ] Call AI for placement analysis
   - [ ] Apply selected placement
 
 ### Testing
+
 - [ ] Test placement suggestions
 - [ ] Test different routine configurations
 - [ ] Test AI reasoning display
@@ -1011,6 +1103,7 @@ npm run start
 ## Phase 9: Feature - Performance Mode 🎤
 
 ### Components
+
 - [ ] Create `components/performance/performance-timer.tsx`
   - [ ] Large countdown timer
   - [ ] Start/pause/reset controls
@@ -1033,6 +1126,7 @@ npm run start
   - [ ] Performance trends
 
 ### Page
+
 - [ ] Create `app/performance/[id]/page.tsx`
   - [ ] Full-screen layout
   - [ ] Load routine by ID
@@ -1042,6 +1136,7 @@ npm run start
   - [ ] Show report after completion
 
 ### Timer Logic
+
 - [ ] Implement `hooks/usePerformanceTimer.ts`
   - [ ] Countdown timer
   - [ ] Track time per joke
@@ -1049,12 +1144,14 @@ npm run start
   - [ ] Pause/resume functionality
 
 ### AI Integration
+
 - [ ] Post-performance analysis
   - [ ] Compare estimated vs actual times
   - [ ] Analyze patterns (what killed vs bombed)
   - [ ] Generate improvement suggestions
 
 ### Testing
+
 - [ ] Test timer functionality
 - [ ] Test feedback tracking
 - [ ] Test performance saving
@@ -1066,6 +1163,7 @@ npm run start
 ## Phase 10: Feature - Dashboard & Organization 📋
 
 ### Components
+
 - [ ] Create `components/dashboard/joke-grid.tsx`
   - [ ] Grid layout of joke cards
   - [ ] Virtualized list for performance (optional)
@@ -1090,6 +1188,7 @@ npm run start
   - [ ] Recent activity
 
 ### Page
+
 - [x] Update `app/page.tsx` (Dashboard)
   - [x] Layout with search and grid
   - [x] Load all jokes
@@ -1101,12 +1200,14 @@ npm run start
   - [x] Stats cards (jokes, routines, polished count)
 
 ### Search Implementation
+
 - [x] Implement basic keyword search
 - [ ] Implement semantic search with AI (optional - future)
   - [ ] Generate embeddings
   - [ ] Similarity search
 
 ### Testing
+
 - [x] Test search functionality
 - [x] Test filters (basic)
 - [ ] Test sorting (future)
@@ -1118,6 +1219,7 @@ npm run start
 ## Phase 11: Export & Import 📤📥
 
 ### Export Functionality
+
 - [ ] Create `lib/export.ts`
   - [ ] Export as JSON
   - [ ] Export routine as TXT script
@@ -1129,6 +1231,7 @@ npm run start
   - [ ] Joke editor: Export single joke
 
 ### Import Functionality
+
 - [ ] Create `lib/import.ts`
   - [ ] Parse JSON file
   - [ ] Validate data structure
@@ -1141,6 +1244,7 @@ npm run start
   - [ ] Conflict resolution
 
 ### Testing
+
 - [ ] Test JSON export/import
 - [ ] Test TXT export
 - [ ] Test PDF export
@@ -1152,6 +1256,7 @@ npm run start
 ## Phase 12: Polish & UX Enhancements ✨
 
 ### UI/UX Improvements
+
 - [ ] Add loading skeletons to all data-heavy pages
 - [ ] Add empty states with helpful CTAs
 - [ ] Add error boundaries
@@ -1166,6 +1271,7 @@ npm run start
 - [ ] Add dark mode (optional)
 
 ### Performance Optimizations
+
 - [ ] Lazy load heavy components
 - [ ] Memoize expensive computations
 - [ ] Virtualize long lists (react-window)
@@ -1173,6 +1279,7 @@ npm run start
 - [ ] Add service worker for offline support (optional)
 
 ### Accessibility
+
 - [ ] Add ARIA labels
 - [ ] Ensure keyboard navigation works
 - [ ] Test with screen reader
@@ -1180,6 +1287,7 @@ npm run start
 - [ ] Ensure color contrast meets WCAG standards
 
 ### Animations
+
 - [ ] Add page transitions (framer-motion)
 - [ ] Add card hover effects
 - [ ] Add drag-and-drop animations
@@ -1191,6 +1299,7 @@ npm run start
 ## Phase 13: Testing & Quality Assurance 🧪
 
 ### Unit Tests
+
 - [ ] Test utility functions
 - [ ] Test storage service
 - [ ] Test custom hooks
@@ -1198,11 +1307,13 @@ npm run start
 - [ ] Test data validation
 
 ### Integration Tests
+
 - [ ] Test API routes
 - [ ] Test component interactions
 - [ ] Test state management flows
 
 ### E2E Tests (Optional)
+
 - [ ] Install Playwright
 - [ ] Test joke creation flow
 - [ ] Test routine building flow
@@ -1210,6 +1321,7 @@ npm run start
 - [ ] Test export/import
 
 ### Manual Testing
+
 - [ ] Test all user flows
 - [ ] Test edge cases
 - [ ] Test error states
@@ -1222,6 +1334,7 @@ npm run start
 ## Phase 14: Documentation & Deployment 🚀
 
 ### Documentation
+
 - [ ] Update README.md
   - [ ] Project description
   - [ ] Features list
@@ -1236,6 +1349,7 @@ npm run start
 - [ ] Add code comments for complex logic
 
 ### Deployment
+
 - [ ] Create production build
   ```bash
   npm run build
@@ -1252,6 +1366,7 @@ npm run start
 - [ ] Set up custom domain (optional)
 
 ### Post-Deployment
+
 - [ ] Monitor for errors (Sentry, LogRocket, etc.)
 - [ ] Gather user feedback
 - [ ] Plan future enhancements
@@ -1264,15 +1379,18 @@ npm run start
 ## Phase 15: User Authentication & Database Integration 🔐
 
 ### Overview
+
 Transform the single-user LocalStorage app into a multi-user cloud-based application with Google authentication and PostgreSQL database.
 
 ### Prerequisites
+
 - [ ] Choose database provider (Supabase or Vercel Postgres)
 - [ ] Set up Google Cloud Console project for OAuth
 - [ ] Create database instance
 - [ ] Install required dependencies
 
 ### Dependencies to Install
+
 ```bash
 npm install next-auth@beta prisma @prisma/client
 npm install -D prisma
@@ -1283,6 +1401,7 @@ npm install react-query # or swr for data fetching
 ### 1. Database Schema Design 📊
 
 #### User Table
+
 ```prisma
 model User {
   id            String    @id @default(cuid())
@@ -1292,13 +1411,13 @@ model User {
   googleId      String    @unique
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-  
+
   // Relations
   jokes         Joke[]
   routines      Routine[]
   performances  Performance[]
   settings      UserSettings?
-  
+
   @@index([email])
   @@index([googleId])
 }
@@ -1307,11 +1426,11 @@ model UserSettings {
   id                String   @id @default(cuid())
   userId            String   @unique
   user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
   theme             String   @default("light")
   emailNotifications Boolean @default(true)
   aiSuggestionsEnabled Boolean @default(true)
-  
+
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 }
@@ -1320,7 +1439,7 @@ model Joke {
   id              String   @id @default(cuid())
   userId          String
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
   premiseId       String?
   title           String
   setup           String   @db.Text
@@ -1331,15 +1450,15 @@ model Joke {
   type            String   @default("observational")
   status          String   @default("draft")
   notes           String?  @db.Text
-  
+
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  
+
   // Relations
   versions        JokeVersion[]
   performances    Performance[]
   routineJokes    RoutineJoke[]
-  
+
   @@index([userId])
   @@index([status])
   @@index([createdAt])
@@ -1349,14 +1468,14 @@ model JokeVersion {
   id          String   @id @default(cuid())
   jokeId      String
   joke        Joke     @relation(fields: [jokeId], references: [id], onDelete: Cascade)
-  
+
   setup       String   @db.Text
   punchline   String   @db.Text
   tags        String[] @default([])
   notes       String?  @db.Text
-  
+
   createdAt   DateTime @default(now())
-  
+
   @@index([jokeId])
   @@index([createdAt])
 }
@@ -1365,18 +1484,18 @@ model Routine {
   id          String   @id @default(cuid())
   userId      String
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
   name        String
   targetTime  Int      @default(300)
   flowScore   Float?
-  
+
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  
+
   // Relations
   jokes       RoutineJoke[]
   performances Performance[]
-  
+
   @@index([userId])
   @@index([createdAt])
 }
@@ -1387,9 +1506,9 @@ model RoutineJoke {
   routine     Routine  @relation(fields: [routineId], references: [id], onDelete: Cascade)
   jokeId      String
   joke        Joke     @relation(fields: [jokeId], references: [id], onDelete: Cascade)
-  
+
   order       Int
-  
+
   @@unique([routineId, jokeId])
   @@index([routineId])
 }
@@ -1402,15 +1521,15 @@ model Performance {
   joke        Joke     @relation(fields: [jokeId], references: [id], onDelete: Cascade)
   routineId   String?
   routine     Routine? @relation(fields: [routineId], references: [id], onDelete: SetNull)
-  
+
   date        DateTime @default(now())
   actualTime  Int
   outcome     String
   notes       String?  @db.Text
   venue       String?
-  
+
   createdAt   DateTime @default(now())
-  
+
   @@index([userId])
   @@index([jokeId])
   @@index([date])
@@ -1420,6 +1539,7 @@ model Performance {
 ### 2. NextAuth.js Configuration 🔑
 
 #### Setup Steps
+
 - [ ] Create `auth.config.ts` for NextAuth configuration
 - [ ] Configure Google OAuth provider
 - [ ] Set up Prisma adapter
@@ -1428,12 +1548,13 @@ model Performance {
 - [ ] Create auth API route handlers
 
 #### Files to Create
+
 ```typescript
 // auth.config.ts
-import NextAuth from "next-auth"
-import Google from "next-auth/providers/google"
-import { PrismaAdapter } from "@auth/prisma-adapter"
-import { prisma } from "@/lib/prisma"
+import NextAuth from "next-auth";
+import Google from "next-auth/providers/google";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import { prisma } from "@/lib/prisma";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -1445,44 +1566,45 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
   callbacks: {
     session({ session, user }) {
-      session.user.id = user.id
-      return session
+      session.user.id = user.id;
+      return session;
     },
   },
   pages: {
     signIn: "/auth/signin",
     error: "/auth/error",
   },
-})
+});
 
 // middleware.ts
-import { auth } from "@/auth.config"
-import { NextResponse } from "next/server"
+import { auth } from "@/auth.config";
+import { NextResponse } from "next/server";
 
 export default auth((req) => {
-  const isLoggedIn = !!req.auth
-  const isAuthPage = req.nextUrl.pathname.startsWith("/auth")
-  const isPublicPage = req.nextUrl.pathname === "/"
+  const isLoggedIn = !!req.auth;
+  const isAuthPage = req.nextUrl.pathname.startsWith("/auth");
+  const isPublicPage = req.nextUrl.pathname === "/";
 
   if (!isLoggedIn && !isAuthPage && !isPublicPage) {
-    return NextResponse.redirect(new URL("/auth/signin", req.url))
+    return NextResponse.redirect(new URL("/auth/signin", req.url));
   }
 
   if (isLoggedIn && isAuthPage) {
-    return NextResponse.redirect(new URL("/dashboard", req.url))
+    return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 
-  return NextResponse.next()
-})
+  return NextResponse.next();
+});
 
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
-}
+};
 ```
 
 ### 3. Google OAuth Setup ☁️
 
 #### Google Cloud Console Configuration
+
 - [ ] Create new project in Google Cloud Console
 - [ ] Enable Google+ API
 - [ ] Create OAuth 2.0 credentials
@@ -1492,6 +1614,7 @@ export const config = {
 - [ ] Copy Client ID and Client Secret to `.env.local`
 
 #### Environment Variables
+
 ```env
 # Google OAuth
 GOOGLE_CLIENT_ID=your_client_id_here
@@ -1508,6 +1631,7 @@ DATABASE_URL=postgresql://user:password@host:port/database
 ### 4. Database Migration Strategy 🔄
 
 #### LocalStorage to Database Migration
+
 - [ ] Create migration utility
 - [ ] Add "Sync to Cloud" button on dashboard
 - [ ] Implement conflict resolution
@@ -1515,91 +1639,97 @@ DATABASE_URL=postgresql://user:password@host:port/database
 - [ ] Add export before migration
 
 #### Migration Component
+
 ```typescript
 // components/migration/sync-to-cloud.tsx
 async function syncLocalStorageToDatabase() {
-  const localJokes = JSON.parse(localStorage.getItem('jokes') || '[]')
-  const localRoutines = JSON.parse(localStorage.getItem('routines') || '[]')
-  
+  const localJokes = JSON.parse(localStorage.getItem("jokes") || "[]");
+  const localRoutines = JSON.parse(localStorage.getItem("routines") || "[]");
+
   // POST to /api/migrate
-  await fetch('/api/migrate', {
-    method: 'POST',
-    body: JSON.stringify({ jokes: localJokes, routines: localRoutines })
-  })
-  
+  await fetch("/api/migrate", {
+    method: "POST",
+    body: JSON.stringify({ jokes: localJokes, routines: localRoutines }),
+  });
+
   // Clear localStorage after successful migration
-  localStorage.clear()
+  localStorage.clear();
 }
 ```
 
 ### 5. API Route Updates 🔌
 
 #### Convert to Authenticated Routes
+
 - [ ] Update all API routes to check authentication
 - [ ] Add user ID to database queries
 - [ ] Implement proper error handling
 - [ ] Add rate limiting per user
 
 #### Example: Protected API Route
+
 ```typescript
 // app/api/jokes/route.ts
-import { auth } from "@/auth.config"
-import { prisma } from "@/lib/prisma"
+import { auth } from "@/auth.config";
+import { prisma } from "@/lib/prisma";
 
 export async function GET(request: Request) {
-  const session = await auth()
-  
+  const session = await auth();
+
   if (!session?.user) {
-    return Response.json({ error: "Unauthorized" }, { status: 401 })
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
-  
+
   const jokes = await prisma.joke.findMany({
     where: { userId: session.user.id },
-    orderBy: { createdAt: 'desc' },
+    orderBy: { createdAt: "desc" },
     include: {
       versions: true,
       performances: true,
-    }
-  })
-  
-  return Response.json({ jokes })
+    },
+  });
+
+  return Response.json({ jokes });
 }
 
 export async function POST(request: Request) {
-  const session = await auth()
-  
+  const session = await auth();
+
   if (!session?.user) {
-    return Response.json({ error: "Unauthorized" }, { status: 401 })
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
-  
-  const body = await request.json()
-  
+
+  const body = await request.json();
+
   const joke = await prisma.joke.create({
     data: {
       ...body,
       userId: session.user.id,
-    }
-  })
-  
-  return Response.json({ joke })
+    },
+  });
+
+  return Response.json({ joke });
 }
 ```
 
 ### 6. UI Components for Auth 🎨
 
 #### Sign In Page
+
 - [ ] Create `app/auth/signin/page.tsx`
 - [ ] Add Google sign-in button
 - [ ] Show app preview for logged-out users
 - [ ] Add privacy policy link
 
 #### User Menu Component
+
 - [ ] Create `components/auth/user-menu.tsx`
 - [ ] Show user avatar and name
 - [ ] Dropdown with settings, logout
 - [ ] Add to header navigation
 
 #### Protected Pages
+
 - [ ] Wrap protected pages with auth check
 - [ ] Show loading state during auth check
 - [ ] Redirect to signin if not authenticated
@@ -1607,6 +1737,7 @@ export async function POST(request: Request) {
 ### 7. Data Fetching Strategy 📡
 
 #### Replace LocalStorage with API Calls
+
 - [ ] Install React Query or SWR
 - [ ] Create API client utilities
 - [ ] Update useJokes to fetch from API
@@ -1615,40 +1746,42 @@ export async function POST(request: Request) {
 - [ ] Implement caching strategy
 
 #### Example with React Query
+
 ```typescript
 // hooks/useJokes.ts
-import { useQuery, useMutation, useQueryClient } from 'react-query'
+import { useQuery, useMutation, useQueryClient } from "react-query";
 
 export function useJokes() {
-  const queryClient = useQueryClient()
-  
-  const { data: jokes, isLoading } = useQuery('jokes', async () => {
-    const res = await fetch('/api/jokes')
-    return res.json()
-  })
-  
+  const queryClient = useQueryClient();
+
+  const { data: jokes, isLoading } = useQuery("jokes", async () => {
+    const res = await fetch("/api/jokes");
+    return res.json();
+  });
+
   const createJoke = useMutation(
-    async (joke: Omit<Joke, 'id'>) => {
-      const res = await fetch('/api/jokes', {
-        method: 'POST',
-        body: JSON.stringify(joke)
-      })
-      return res.json()
+    async (joke: Omit<Joke, "id">) => {
+      const res = await fetch("/api/jokes", {
+        method: "POST",
+        body: JSON.stringify(joke),
+      });
+      return res.json();
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries('jokes')
-      }
+        queryClient.invalidateQueries("jokes");
+      },
     }
-  )
-  
-  return { jokes, isLoading, createJoke }
+  );
+
+  return { jokes, isLoading, createJoke };
 }
 ```
 
 ### 8. Testing Checklist ✅
 
 #### Authentication Tests
+
 - [ ] Test Google OAuth flow
 - [ ] Test session persistence
 - [ ] Test logout functionality
@@ -1656,6 +1789,7 @@ export function useJokes() {
 - [ ] Test token refresh
 
 #### Database Tests
+
 - [ ] Test CRUD operations for jokes
 - [ ] Test CRUD operations for routines
 - [ ] Test user data isolation
@@ -1663,6 +1797,7 @@ export function useJokes() {
 - [ ] Test migration from LocalStorage
 
 #### Integration Tests
+
 - [ ] Test complete user flow (signup → create joke → logout → login)
 - [ ] Test data persistence across sessions
 - [ ] Test multi-device access
@@ -1671,6 +1806,7 @@ export function useJokes() {
 ### 9. Security Considerations 🔒
 
 #### Implement Security Best Practices
+
 - [ ] Validate user owns resources before modification
 - [ ] Sanitize user inputs
 - [ ] Implement CSRF protection
@@ -1680,19 +1816,20 @@ export function useJokes() {
 - [ ] Add audit logs for sensitive operations
 
 #### Security Middleware
+
 ```typescript
 // lib/security.ts
 export async function requireAuth(request: Request) {
-  const session = await auth()
+  const session = await auth();
   if (!session?.user) {
-    throw new Error("Unauthorized")
+    throw new Error("Unauthorized");
   }
-  return session.user
+  return session.user;
 }
 
 export async function requireOwnership(userId: string, resourceUserId: string) {
   if (userId !== resourceUserId) {
-    throw new Error("Forbidden: You don't own this resource")
+    throw new Error("Forbidden: You don't own this resource");
   }
 }
 ```
@@ -1700,6 +1837,7 @@ export async function requireOwnership(userId: string, resourceUserId: string) {
 ### 10. Performance Optimization 🚀
 
 #### Caching Strategy
+
 - [ ] Implement SWR/React Query caching
 - [ ] Add database indexes
 - [ ] Use connection pooling
@@ -1708,6 +1846,7 @@ export async function requireOwnership(userId: string, resourceUserId: string) {
 - [ ] Cache AI responses (if user consents)
 
 #### Database Optimization
+
 - [ ] Add indexes on frequently queried fields
 - [ ] Use select to limit returned fields
 - [ ] Implement cursor-based pagination
@@ -1716,6 +1855,7 @@ export async function requireOwnership(userId: string, resourceUserId: string) {
 ### 11. Deployment Updates 🌐
 
 #### Environment Setup
+
 - [ ] Set up production database (Supabase/Vercel Postgres)
 - [ ] Configure Google OAuth for production domain
 - [ ] Set production environment variables
@@ -1723,6 +1863,7 @@ export async function requireOwnership(userId: string, resourceUserId: string) {
 - [ ] Test production deployment
 
 #### Vercel Deployment
+
 ```bash
 # Set environment variables in Vercel dashboard
 - GOOGLE_CLIENT_ID
@@ -1738,6 +1879,7 @@ vercel --prod
 ### 12. Migration Path for Existing Users 🔄
 
 #### User Migration Flow
+
 1. **First Login**: Show welcome modal explaining new features
 2. **Detect LocalStorage**: Check if user has existing local data
 3. **Offer Migration**: "Sync your local data to the cloud?"
@@ -1747,6 +1889,7 @@ vercel --prod
 7. **Cleanup**: Clear LocalStorage after confirmation
 
 #### Migration UI Component
+
 - [ ] Create `components/migration/migration-wizard.tsx`
 - [ ] Multi-step wizard (Welcome → Backup → Migrate → Verify → Complete)
 - [ ] Progress indicators
@@ -1758,6 +1901,7 @@ vercel --prod
 ## Phase 16: Advanced Multi-User Features 🔮
 
 ### Optional Enhancements (After Auth is Complete)
+
 - [ ] Multi-user collaboration (share routines)
 - [ ] Public profile pages
 - [ ] Follow other comedians
@@ -1781,6 +1925,7 @@ vercel --prod
 **Current Phase**: MVP Complete! 🎉
 
 **Completed Phases**:
+
 - ✅ Phase 0: Project Setup
 - ✅ Phase 1: Core Data Layer
 - ✅ Phase 2: AI Integration Layer (with JSON parsing fix)
@@ -1793,6 +1938,7 @@ vercel --prod
 - ✅ **Phase 15: User Authentication & Database Integration** ⭐ COMPLETE!
 
 **Recently Completed**:
+
 - ✅ **Phase 15: User Authentication & Database Integration** ⭐ COMPLETE!
   - ✅ Google OAuth fully configured
   - ✅ PostgreSQL database with Prisma
@@ -1803,6 +1949,7 @@ vercel --prod
   - ✅ Multi-user support with data isolation
 
 **Future Phases**:
+
 - Phase 8: Smart Placement Assistant (planned)
 - Phase 9: Performance Mode (planned)
 - Phase 11: Export to PDF/TXT (planned)
@@ -1812,6 +1959,7 @@ vercel --prod
 **Blockers**: None
 
 **What's Working**:
+
 - ✅ Full joke creation workflow with AI assistance
 - ✅ AI generates setups and punchlines from premises
 - ✅ AI suggests tags and callbacks
@@ -1829,6 +1977,7 @@ vercel --prod
 - ✅ Fixed: OpenAI markdown code block parsing issue
 
 **Notes**:
+
 - **Production-ready with Phase 15 complete!** 🚀
 - Dev server running at http://localhost:3000
 - OpenAI GPT-5 configured for all AI features [[memory:9524103]]
@@ -1841,6 +1990,7 @@ vercel --prod
 - **Migration**: Automatic LocalStorage to database wizard
 
 **Next Steps - Phase 15 (Authentication & Database)**:
+
 1. ✅ OpenAI API key configured and working
 2. ✅ Joke creation workflow tested and functional
 3. 🎯 **Set up Google OAuth** (Google Cloud Console)
@@ -1852,15 +2002,7 @@ vercel --prod
 9. 🎯 **Build migration tool** for existing LocalStorage users
 10. 🎯 **Test multi-user functionality** and data isolation
 
-**Future Steps**:
-11. ✅ Build Joke Editor with version history ⭐ DONE!
-12. ✅ Build Routine Builder with drag-and-drop ⭐ DONE!
-13. Add Performance Mode with timer
-14. Add export to PDF functionality
-15. Implement advanced filtering and sorting
-16. Add social/collaborative features
-17. Complete Phase 15 (Authentication & Database)
-18. Deploy to production
+**Future Steps**: 11. ✅ Build Joke Editor with version history ⭐ DONE! 12. ✅ Build Routine Builder with drag-and-drop ⭐ DONE! 13. Add Performance Mode with timer 14. Add export to PDF functionality 15. Implement advanced filtering and sorting 16. Add social/collaborative features 17. Complete Phase 15 (Authentication & Database) 18. Deploy to production
 
 ---
 
@@ -1875,6 +2017,7 @@ vercel --prod
 ### ✅ **Fully Implemented (Steps 1-14):**
 
 **Authentication & Database (Steps 1-7):**
+
 1. ✅ Installed auth & database dependencies (next-auth, prisma, @tanstack/react-query)
 2. ✅ Created complete Prisma schema with 9 models (User, Joke, Routine, etc.)
 3. ✅ Configured NextAuth.js with Google OAuth & Prisma adapter
@@ -1883,18 +2026,12 @@ vercel --prod
 6. ✅ Created user menu component with avatar & logout
 7. ✅ Manual setup completed (Supabase + Google OAuth + Migrations)
 
-**API & Data Layer (Steps 8-10):**
-8. ✅ Created 10 authenticated API routes using Prisma
-9. ✅ Implemented React Query hooks (useJokesQuery, useRoutinesQuery)
-10. ✅ Built 5-step LocalStorage migration wizard
+**API & Data Layer (Steps 8-10):** 8. ✅ Created 10 authenticated API routes using Prisma 9. ✅ Implemented React Query hooks (useJokesQuery, useRoutinesQuery) 10. ✅ Built 5-step LocalStorage migration wizard
 
-**Security & Testing (Steps 11-14):**
-11. ✅ Added security middleware and validation functions
-12. ✅ Tested multi-user functionality
-13. ✅ Verified data isolation
-14. ✅ Updated documentation
+**Security & Testing (Steps 11-14):** 11. ✅ Added security middleware and validation functions 12. ✅ Tested multi-user functionality 13. ✅ Verified data isolation 14. ✅ Updated documentation
 
 ### 🚀 **Now Available:**
+
 - 🔐 Google OAuth authentication
 - 💾 PostgreSQL cloud database
 - 🔄 React Query with optimistic updates

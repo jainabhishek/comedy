@@ -3,10 +3,12 @@
 ## 🎯 Header Display Rules
 
 ### ❌ No Header (Clean Pages)
+
 - **Homepage** (`/`) - Landing page
 - **Auth Pages** (`/auth/*`) - Sign in, sign up, error pages
 
 ### ✅ Header Visible (App Pages)
+
 - **Dashboard** (`/dashboard`)
 - **Workshop** (`/workshop`)
 - **Editor** (`/editor/[id]`)
@@ -17,15 +19,18 @@
 ## 📏 Main Container Rules
 
 ### Full Width (No Container, No Padding)
+
 - **Homepage** (`/`) - Edge-to-edge content
 - **Auth Pages** (`/auth/*`) - Clean sign-in experience
 
 ### Container Layout (Centered with Padding)
+
 - **All App Pages** - Consistent `container mx-auto px-4 py-8`
 
 ## 🔧 Implementation
 
 ### ConditionalHeader Component
+
 ```typescript
 const isHomepage = pathname === "/";
 const isAuthPage = pathname.startsWith("/auth");
@@ -37,6 +42,7 @@ if (isHomepage || isAuthPage) {
 ```
 
 ### ConditionalMain Component
+
 ```typescript
 const isHomepage = pathname === "/";
 const isAuthPage = pathname.startsWith("/auth");
@@ -65,6 +71,7 @@ app/
 ## ✅ Result
 
 ### Sign-In Page (`/auth/signin`)
+
 ```
 ┌─────────────────────────────────┐
 │                                 │ ← No header!
@@ -78,6 +85,7 @@ app/
 ```
 
 ### App Pages (e.g., `/dashboard`)
+
 ```
 ┌─────────────────────────────────┐
 │ 🎤 Tight 5 | Home | Dashboard   │ ← Header visible
@@ -98,4 +106,3 @@ app/
 ---
 
 **Your auth pages now have a clean, distraction-free design!** 🎉
-

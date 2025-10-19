@@ -3,10 +3,7 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 
 // GET /api/jokes/[id] - Get a single joke
-export async function GET(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
@@ -70,18 +67,12 @@ export async function GET(
     return NextResponse.json({ joke: transformedJoke });
   } catch (error) {
     console.error("Error fetching joke:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch joke" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to fetch joke" }, { status: 500 });
   }
 }
 
 // PATCH /api/jokes/[id] - Update a joke
-export async function PATCH(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
@@ -177,18 +168,12 @@ export async function PATCH(
     return NextResponse.json({ joke: transformedJoke });
   } catch (error) {
     console.error("Error updating joke:", error);
-    return NextResponse.json(
-      { error: "Failed to update joke" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to update joke" }, { status: 500 });
   }
 }
 
 // DELETE /api/jokes/[id] - Delete a joke
-export async function DELETE(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
@@ -212,10 +197,6 @@ export async function DELETE(
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Error deleting joke:", error);
-    return NextResponse.json(
-      { error: "Failed to delete joke" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to delete joke" }, { status: 500 });
   }
 }
-

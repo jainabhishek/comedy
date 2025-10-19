@@ -9,7 +9,9 @@ async function fetchRoutines(): Promise<Routine[]> {
   return data.routines;
 }
 
-async function createRoutine(routine: Omit<Routine, "id" | "createdAt" | "updatedAt" | "currentTime">): Promise<Routine> {
+async function createRoutine(
+  routine: Omit<Routine, "id" | "createdAt" | "updatedAt" | "currentTime">
+): Promise<Routine> {
   const res = await fetch("/api/routines", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -110,4 +112,3 @@ export function useRoutinesQuery() {
     },
   };
 }
-

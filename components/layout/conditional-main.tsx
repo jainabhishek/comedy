@@ -16,4 +16,3 @@ export function ConditionalMain({ children }: { children: ReactNode }) {
   // App pages: container with padding
   return <main className="container mx-auto px-4 py-8 min-h-screen">{children}</main>;
 }
-

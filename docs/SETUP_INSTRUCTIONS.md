@@ -67,11 +67,13 @@ Follow the guide in `SUPABASE_SETUP.md`:
 ### Step 3: Generate NextAuth Secret
 
 Run this command in your terminal:
+
 ```bash
 openssl rand -base64 32
 ```
 
 Update `.env.local`:
+
 ```bash
 NEXTAUTH_SECRET="paste-the-generated-secret-here"
 ```
@@ -99,6 +101,7 @@ npm run dev
 ```
 
 Visit http://localhost:3000 and you should:
+
 1. Be redirected to `/auth/signin`
 2. See the Google sign-in button
 3. Click it and authenticate with your Google account
@@ -108,12 +111,14 @@ Visit http://localhost:3000 and you should:
 ## 🎯 What's Next?
 
 After completing these steps, you'll have:
+
 - ✅ Full authentication working
 - ✅ Database connected
 - ✅ User accounts with Google OAuth
 - ✅ Protected routes
 
 **Remaining work:**
+
 1. Update API routes to use database instead of LocalStorage
 2. Migrate useJokes/useRoutines hooks to React Query
 3. Create LocalStorage → Database migration tool
@@ -122,19 +127,23 @@ After completing these steps, you'll have:
 ## 🐛 Troubleshooting
 
 ### "Error: Invalid `prisma.user.create()` invocation"
+
 - Check DATABASE_URL is correct in `.env.local`
 - Run `npx prisma migrate reset` and try again
 
 ### "Error: NextAuth configuration error"
+
 - Verify GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET are set
 - Check Google Console redirect URIs match exactly
 
 ### "Database connection error"
+
 - Verify Supabase password is correct
 - Check Supabase project is running
 - Try pinging: `psql "your-connection-string" -c "SELECT 1"`
 
 ### "Session not persisting"
+
 - Check NEXTAUTH_SECRET is generated and set
 - Clear browser cookies and try again
 
@@ -155,10 +164,10 @@ After completing these steps, you'll have:
 ## 🎉 You're Almost There!
 
 Once these steps are complete, you'll have a fully functional multi-user comedy app with:
+
 - Secure Google authentication
-- Cloud database storage  
+- Cloud database storage
 - User-specific data isolation
 - Professional auth UI
 
 Next steps will migrate the LocalStorage data to database and update all the API routes!
-

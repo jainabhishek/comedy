@@ -41,19 +41,23 @@ export default function WorkshopPage() {
   const [notes, setNotes] = useState("");
   const [hasSuggestedTags, setHasSuggestedTags] = useState(false);
   const [expandedCategories, setExpandedCategories] = useState<string[]>(["core"]);
-  const [selectedTechniques, setSelectedTechniques] = useState<("irony-sarcasm" | "character-voice" | "benign-violation")[]>([]);
+  const [selectedTechniques, setSelectedTechniques] = useState<
+    ("irony-sarcasm" | "character-voice" | "benign-violation")[]
+  >([]);
 
   const currentStructure: JokeStructure | null = useMemo(() => {
-    return structureId ? getStructureById(structureId) ?? null : null;
+    return structureId ? (getStructureById(structureId) ?? null) : null;
   }, [structureId]);
 
   const totalParts = currentStructure?.parts.length ?? 0;
   const currentPart: JokeStructurePart | null =
-    step === "part" && currentStructure ? currentStructure.parts[currentPartIndex] ?? null : null;
+    step === "part" && currentStructure ? (currentStructure.parts[currentPartIndex] ?? null) : null;
 
   const orderedSelections = useMemo(() => {
     if (!currentStructure) return [];
-    return currentStructure.parts.map((part) => partsState[part.id]?.selections ?? { partId: part.id, selected: [] });
+    return currentStructure.parts.map(
+      (part) => partsState[part.id]?.selections ?? { partId: part.id, selected: [] }
+    );
   }, [currentStructure, partsState]);
 
   const previousSelections = useMemo(() => {
@@ -93,11 +97,10 @@ export default function WorkshopPage() {
         ...prev,
         [currentPart.id]: {
           options: suggestions,
-          selections:
-            prev[currentPart.id]?.selections ?? {
-              partId: currentPart.id,
-              selected: [],
-            },
+          selections: prev[currentPart.id]?.selections ?? {
+            partId: currentPart.id,
+            selected: [],
+          },
         },
       }));
     } catch (err) {
@@ -338,10 +341,13 @@ export default function WorkshopPage() {
       return;
     }
 
-    const structuredParts = currentStructure.parts.map((part) => partsState[part.id]?.selections ?? {
-      partId: part.id,
-      selected: [],
-    });
+    const structuredParts = currentStructure.parts.map(
+      (part) =>
+        partsState[part.id]?.selections ?? {
+          partId: part.id,
+          selected: [],
+        }
+    );
 
     const firstSelection = structuredParts[0]?.selected[0];
     const lastSelection = structuredParts[structuredParts.length - 1]?.selected.slice(-1)[0];
@@ -439,7 +445,9 @@ export default function WorkshopPage() {
         <Card className="animate-scale-in">
           <CardHeader>
             <CardTitle>Step 1: Capture Your Premise</CardTitle>
-            <CardDescription>Describe the seed of the bit so the AI understands the context.</CardDescription>
+            <CardDescription>
+              Describe the seed of the bit so the AI understands the context.
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <Textarea
@@ -452,7 +460,9 @@ export default function WorkshopPage() {
               <Button onClick={() => setStep("structure")} disabled={!premise.trim()}>
                 Next: Choose Structure
               </Button>
-              <Button variant="outline" onClick={() => router.push("/dashboard")}>Cancel</Button>
+              <Button variant="outline" onClick={() => router.push("/dashboard")}>
+                Cancel
+              </Button>
             </div>
           </CardContent>
         </Card>
@@ -462,13 +472,16 @@ export default function WorkshopPage() {
         <Card className="animate-scale-in">
           <CardHeader>
             <CardTitle>Step 2: Pick a Structure</CardTitle>
-            <CardDescription>Select the blueprint that best fits your premise. Structures are organized by category.</CardDescription>
+            <CardDescription>
+              Select the blueprint that best fits your premise. Structures are organized by
+              category.
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {STRUCTURE_CATEGORIES.map((category) => {
               const categoryStructures = getStructuresByCategory(category.id);
               const isExpanded = expandedCategories.includes(category.id);
-              
+
               return (
                 <div key={category.id} className="border rounded-lg overflow-hidden">
                   <button
@@ -489,11 +502,16 @@ export default function WorkshopPage() {
                         viewBox="0 0 24 24"
                         stroke="currentColor"
                       >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 9l-7 7-7-7"
+                        />
                       </svg>
                     </div>
                   </button>
-                  
+
                   {isExpanded && (
                     <div className="p-4 pt-0 grid gap-4 md:grid-cols-2">
                       {categoryStructures.map((structure) => (
@@ -516,7 +534,10 @@ export default function WorkshopPage() {
                           </CardHeader>
                           <CardContent className="space-y-2">
                             {structure.parts.map((part, index) => (
-                              <div key={part.id} className="flex items-start gap-2 text-sm text-muted">
+                              <div
+                                key={part.id}
+                                className="flex items-start gap-2 text-sm text-muted"
+                              >
                                 <span className="font-semibold text-foreground">{index + 1}.</span>
                                 <div>
                                   <p className="font-medium text-foreground">{part.label}</p>
@@ -541,7 +562,9 @@ export default function WorkshopPage() {
           <CardHeader>
             <CardTitle>
               Step 3: Craft {currentPart.label}
-              <span className="ml-2 text-sm text-muted">({currentPartIndex + 1} of {totalParts})</span>
+              <span className="ml-2 text-sm text-muted">
+                ({currentPartIndex + 1} of {totalParts})
+              </span>
             </CardTitle>
             <CardDescription>{currentPart.description}</CardDescription>
           </CardHeader>
@@ -560,7 +583,8 @@ export default function WorkshopPage() {
 
             <div className="grid gap-3">
               {(partsState[currentPart.id]?.options ?? []).map((option) => {
-                const isSelected = partsState[currentPart.id]?.selections.selected.includes(option) ?? false;
+                const isSelected =
+                  partsState[currentPart.id]?.selections.selected.includes(option) ?? false;
                 return (
                   <Card
                     key={`${currentPart.id}-${option}`}
@@ -596,7 +620,7 @@ export default function WorkshopPage() {
                 <Button
                   size="sm"
                   onClick={() => handleAddCustomOption(currentPart)}
-                  disabled={!(customInputs[currentPart.id]?.trim())}
+                  disabled={!customInputs[currentPart.id]?.trim()}
                 >
                   Add Custom Option
                 </Button>
@@ -610,7 +634,14 @@ export default function WorkshopPage() {
                   <button
                     type="button"
                     className="text-xs uppercase text-muted hover:text-foreground"
-                    onClick={() => handleSelectOption(currentPart, selection, partsState[currentPart.id]?.selections.customInputs?.includes(selection) ?? false)}
+                    onClick={() =>
+                      handleSelectOption(
+                        currentPart,
+                        selection,
+                        partsState[currentPart.id]?.selections.customInputs?.includes(selection) ??
+                          false
+                      )
+                    }
                   >
                     remove
                   </button>
@@ -650,7 +681,9 @@ export default function WorkshopPage() {
                       <p className="font-medium text-foreground">
                         {index + 1}. {part.label}
                       </p>
-                      <p className="text-sm text-muted">{selection.length > 0 ? selection.join(" | ") : "No selection"}</p>
+                      <p className="text-sm text-muted">
+                        {selection.length > 0 ? selection.join(" | ") : "No selection"}
+                      </p>
                     </div>
                     <Button size="sm" variant="outline" onClick={() => handleEditPart(index)}>
                       Edit
@@ -676,7 +709,9 @@ export default function WorkshopPage() {
                   min={ESTIMATED_TIME_RANGE.min}
                   max={ESTIMATED_TIME_RANGE.max}
                   value={estimatedTime}
-                  onChange={(event) => setEstimatedTime(Number(event.target.value) || ESTIMATED_TIME_RANGE.min)}
+                  onChange={(event) =>
+                    setEstimatedTime(Number(event.target.value) || ESTIMATED_TIME_RANGE.min)
+                  }
                 />
               </div>
             </section>
@@ -684,7 +719,12 @@ export default function WorkshopPage() {
             <section className="space-y-3">
               <div className="flex items-center gap-3">
                 <h3 className="text-sm font-medium uppercase tracking-[0.2em]">Tags</h3>
-                <Button variant="outline" size="sm" onClick={handleSuggestTags} disabled={hasSuggestedTags && tags.length > 0}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleSuggestTags}
+                  disabled={hasSuggestedTags && tags.length > 0}
+                >
                   {hasSuggestedTags ? "Tags Added" : "Suggest Tags"}
                 </Button>
               </div>
@@ -692,7 +732,11 @@ export default function WorkshopPage() {
                 {tags.map((tag) => (
                   <Badge key={tag} variant="glass" className="gap-2">
                     {tag}
-                    <button type="button" className="text-xs uppercase text-muted" onClick={() => handleRemoveTag(tag)}>
+                    <button
+                      type="button"
+                      className="text-xs uppercase text-muted"
+                      onClick={() => handleRemoveTag(tag)}
+                    >
                       remove
                     </button>
                   </Badge>
@@ -723,7 +767,9 @@ export default function WorkshopPage() {
             <section className="space-y-3">
               <div>
                 <label className="text-sm font-medium">Optional Techniques (Attitude/POV)</label>
-                <p className="text-xs text-muted mt-1">Add optional layers to enhance your joke&apos;s delivery and impact.</p>
+                <p className="text-xs text-muted mt-1">
+                  Add optional layers to enhance your joke&apos;s delivery and impact.
+                </p>
               </div>
               <div className="space-y-2">
                 <label className="flex items-start gap-3 p-3 border rounded-lg cursor-pointer hover:bg-muted/30 transition-colors">
@@ -735,7 +781,9 @@ export default function WorkshopPage() {
                   />
                   <div>
                     <p className="font-medium text-sm">Irony / Sarcasm</p>
-                    <p className="text-xs text-muted">Add bite by saying the opposite of what you mean</p>
+                    <p className="text-xs text-muted">
+                      Add bite by saying the opposite of what you mean
+                    </p>
                   </div>
                 </label>
                 <label className="flex items-start gap-3 p-3 border rounded-lg cursor-pointer hover:bg-muted/30 transition-colors">
@@ -759,7 +807,9 @@ export default function WorkshopPage() {
                   />
                   <div>
                     <p className="font-medium text-sm">Benign Violation ⚠️</p>
-                    <p className="text-xs text-muted">Tease boundaries mindfully (context-sensitive)</p>
+                    <p className="text-xs text-muted">
+                      Tease boundaries mindfully (context-sensitive)
+                    </p>
                   </div>
                 </label>
               </div>
@@ -769,7 +819,9 @@ export default function WorkshopPage() {
               <Button onClick={handleSaveJoke} disabled={loading}>
                 {loading ? <AILoadingIndicator /> : "Save Joke"}
               </Button>
-              <Button variant="outline" onClick={() => router.push("/dashboard")}>Cancel</Button>
+              <Button variant="outline" onClick={() => router.push("/dashboard")}>
+                Cancel
+              </Button>
             </div>
 
             {error && <p className="text-sm text-error">{error}</p>}

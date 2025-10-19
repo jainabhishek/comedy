@@ -3,10 +3,7 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 
 // GET /api/routines/[id] - Get a single routine
-export async function GET(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
@@ -27,10 +24,7 @@ export async function GET(
     });
 
     if (!routine) {
-      return NextResponse.json(
-        { error: "Routine not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Routine not found" }, { status: 404 });
     }
 
     // Verify ownership
@@ -39,10 +33,7 @@ export async function GET(
     }
 
     const jokeIds = routine.jokes.map((rj) => rj.jokeId);
-    const currentTime = routine.jokes.reduce(
-      (sum, rj) => sum + rj.joke.estimatedTime,
-      0
-    );
+    const currentTime = routine.jokes.reduce((sum, rj) => sum + rj.joke.estimatedTime, 0);
 
     const transformedRoutine = {
       id: routine.id,
@@ -58,18 +49,12 @@ export async function GET(
     return NextResponse.json({ routine: transformedRoutine });
   } catch (error) {
     console.error("Error fetching routine:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch routine" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to fetch routine" }, { status: 500 });
   }
 }
 
 // PATCH /api/routines/[id] - Update a routine
-export async function PATCH(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
@@ -82,10 +67,7 @@ export async function PATCH(
     // Verify ownership
     const existingRoutine = await prisma.routine.findUnique({ where: { id } });
     if (!existingRoutine) {
-      return NextResponse.json(
-        { error: "Routine not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Routine not found" }, { status: 404 });
     }
     if (existingRoutine.userId !== session.user.id) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
@@ -138,10 +120,7 @@ export async function PATCH(
     }
 
     const jokeIds = updatedRoutine.jokes.map((rj) => rj.jokeId);
-    const currentTime = updatedRoutine.jokes.reduce(
-      (sum, rj) => sum + rj.joke.estimatedTime,
-      0
-    );
+    const currentTime = updatedRoutine.jokes.reduce((sum, rj) => sum + rj.joke.estimatedTime, 0);
 
     const transformedRoutine = {
       id: updatedRoutine.id,
@@ -157,18 +136,12 @@ export async function PATCH(
     return NextResponse.json({ routine: transformedRoutine });
   } catch (error) {
     console.error("Error updating routine:", error);
-    return NextResponse.json(
-      { error: "Failed to update routine" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to update routine" }, { status: 500 });
   }
 }
 
 // DELETE /api/routines/[id] - Delete a routine
-export async function DELETE(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
@@ -180,10 +153,7 @@ export async function DELETE(
     // Verify ownership
     const routine = await prisma.routine.findUnique({ where: { id } });
     if (!routine) {
-      return NextResponse.json(
-        { error: "Routine not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Routine not found" }, { status: 404 });
     }
     if (routine.userId !== session.user.id) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
@@ -195,9 +165,6 @@ export async function DELETE(
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Error deleting routine:", error);
-    return NextResponse.json(
-      { error: "Failed to delete routine" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to delete routine" }, { status: 500 });
   }
 }

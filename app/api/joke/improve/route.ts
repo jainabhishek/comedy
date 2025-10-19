@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
-import {
-  SYSTEM_PROMPTS,
-  improveJokePrompt,
-  ERROR_MESSAGES,
-} from "@/lib/ai-prompts";
+import { SYSTEM_PROMPTS, improveJokePrompt, ERROR_MESSAGES } from "@/lib/ai-prompts";
 import { extractResponseText } from "@/lib/openai-response";
 
 const openai = new OpenAI({

@@ -13,23 +13,23 @@
   --bg-gradient-end: #fce7f3;
 
   /* Brand Colors - Vibrant Apple-style */
-  --primary: #007AFF; /* iOS Blue */
-  --primary-dark: #0051D5;
-  --primary-light: #4DA2FF;
+  --primary: #007aff; /* iOS Blue */
+  --primary-dark: #0051d5;
+  --primary-light: #4da2ff;
 
-  --secondary: #5856D6; /* iOS Purple */
-  --secondary-dark: #4644B8;
-  --secondary-light: #7B79EA;
+  --secondary: #5856d6; /* iOS Purple */
+  --secondary-dark: #4644b8;
+  --secondary-light: #7b79ea;
 
-  --accent: #FF2D55; /* iOS Pink */
-  --accent-dark: #D9003D;
-  --accent-light: #FF5C7C;
+  --accent: #ff2d55; /* iOS Pink */
+  --accent-dark: #d9003d;
+  --accent-light: #ff5c7c;
 
   /* Functional Colors */
-  --success: #34C759; /* iOS Green */
-  --warning: #FF9500; /* iOS Orange */
-  --error: #FF3B30; /* iOS Red */
-  --info: #5AC8FA; /* iOS Teal */
+  --success: #34c759; /* iOS Green */
+  --warning: #ff9500; /* iOS Orange */
+  --error: #ff3b30; /* iOS Red */
+  --info: #5ac8fa; /* iOS Teal */
 
   /* Glass Material - Light Mode */
   --glass-bg: rgba(255, 255, 255, 0.75);
@@ -42,9 +42,9 @@
 
   /* Shadows - Light Mode */
   --shadow-color-sm: rgba(0, 0, 0, 0.06);
-  --shadow-color-md: rgba(0, 0, 0, 0.10);
+  --shadow-color-md: rgba(0, 0, 0, 0.1);
   --shadow-color-lg: rgba(0, 0, 0, 0.15);
-  --shadow-color-xl: rgba(0, 0, 0, 0.20);
+  --shadow-color-xl: rgba(0, 0, 0, 0.2);
 
   /* Inset Highlights - Light Mode */
   --inset-highlight: rgba(255, 255, 255, 0.4);
@@ -102,13 +102,13 @@
 @media (prefers-color-scheme: dark) {
   :root {
     /* OpenAI-inspired Layered Dark Mode */
-    --background: #0D0D0D;
-    --foreground: #ECECEC;
+    --background: #0d0d0d;
+    --foreground: #ececec;
 
     /* Layer System - Progressive elevation */
-    --surface-base: #1A1A1A;
+    --surface-base: #1a1a1a;
     --surface-elevated: #202020;
-    --surface-higher: #2A2A2A;
+    --surface-higher: #2a2a2a;
 
     /* Glass Material - Dark Mode with better depth */
     --glass-bg: rgba(26, 26, 26, 0.8);
@@ -132,15 +132,16 @@
     --border: rgba(255, 255, 255, 0.08);
     --input-bg: rgba(32, 32, 32, 0.7);
     --card-bg: rgba(26, 26, 26, 0.8);
-    --muted: #A1A1A1;
+    --muted: #a1a1a1;
     --muted-bg: rgba(255, 255, 255, 0.06);
   }
 }
 
 /* System Font Stack (SF Pro-like) */
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI",
-               Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Oxygen, Ubuntu,
+    Cantarell, "Helvetica Neue", Arial, sans-serif;
   color: var(--foreground);
   background: var(--background);
   min-height: 100vh;
@@ -208,7 +209,6 @@ body {
     0 24px 64px var(--shadow-color-xl);
 }
 
-
 /* Smooth Animations */
 .animate-fade-in {
   animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -259,7 +259,8 @@ body {
 }
 
 @keyframes floating {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px);
   }
   50% {
@@ -274,18 +275,13 @@ body {
 }
 
 .shimmer::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.3),
-    transparent
-  );
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
   animation: shimmer 2s infinite;
 }
 

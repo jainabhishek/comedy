@@ -62,11 +62,7 @@ export function useAI() {
 
   // Improve joke
   const improveJoke = useCallback(
-    async (
-      setup: string,
-      punchline: string,
-      direction: string
-    ): Promise<JokeImprovement> => {
+    async (setup: string, punchline: string, direction: string): Promise<JokeImprovement> => {
       setLoading(true);
       setError(null);
 
@@ -184,7 +180,9 @@ export function useAI() {
 
   // Optimize routine
   const optimizeRoutine = useCallback(
-    async (jokes: RoutineJokeSummary[]): Promise<{ optimizedOrder: string[]; reasoning: string }> => {
+    async (
+      jokes: RoutineJokeSummary[]
+    ): Promise<{ optimizedOrder: string[]; reasoning: string }> => {
       setLoading(true);
       setError(null);
 

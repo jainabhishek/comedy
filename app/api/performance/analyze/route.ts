@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
-import {
-  SYSTEM_PROMPTS,
-  analyzePerformancePrompt,
-  ERROR_MESSAGES,
-} from "@/lib/ai-prompts";
+import { SYSTEM_PROMPTS, analyzePerformancePrompt, ERROR_MESSAGES } from "@/lib/ai-prompts";
 import { extractResponseText } from "@/lib/openai-response";
 
 const openai = new OpenAI({
@@ -17,10 +13,7 @@ export async function POST(request: NextRequest) {
     const { performances } = body;
 
     if (!performances || !Array.isArray(performances) || performances.length === 0) {
-      return NextResponse.json(
-        { error: "Missing or invalid performances array" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Missing or invalid performances array" }, { status: 400 });
     }
 
     const prompt = analyzePerformancePrompt(performances);

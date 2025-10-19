@@ -11,16 +11,18 @@ interface MigrationWizardProps {
 export function MigrationWizard({ onComplete }: MigrationWizardProps) {
   const [step, setStep] = useState(1);
   const [migrating, setMigrating] = useState(false);
-  const [result, setResult] = useState<{ jokesCreated: number; routinesCreated: number } | null>(null);
+  const [result, setResult] = useState<{ jokesCreated: number; routinesCreated: number } | null>(
+    null
+  );
   const [error, setError] = useState<string | null>(null);
 
   const detectLocalStorageData = () => {
     const jokes = localStorage.getItem("jokes");
     const routines = localStorage.getItem("routines");
-    
+
     const jokeCount = jokes ? JSON.parse(jokes).length : 0;
     const routineCount = routines ? JSON.parse(routines).length : 0;
-    
+
     return { jokeCount, routineCount };
   };
 
@@ -30,7 +32,7 @@ export function MigrationWizard({ onComplete }: MigrationWizardProps) {
   const handleExport = () => {
     const jokes = localStorage.getItem("jokes") || "[]";
     const routines = localStorage.getItem("routines") || "[]";
-    
+
     const exportData = {
       jokes: JSON.parse(jokes),
       routines: JSON.parse(routines),
@@ -119,13 +121,7 @@ export function MigrationWizard({ onComplete }: MigrationWizardProps) {
             >
               {s}
             </div>
-            {s < 5 && (
-              <div
-                className={`w-16 h-1 ${
-                  s < step ? "bg-primary" : "bg-gray-200"
-                }`}
-              />
-            )}
+            {s < 5 && <div className={`w-16 h-1 ${s < step ? "bg-primary" : "bg-gray-200"}`} />}
           </div>
         ))}
       </div>
@@ -147,9 +143,7 @@ export function MigrationWizard({ onComplete }: MigrationWizardProps) {
                 <li>🎯 {routineCount} routines</li>
               </ul>
             </div>
-            <p className="text-sm text-muted">
-              By migrating to the cloud, you will be able to:
-            </p>
+            <p className="text-sm text-muted">By migrating to the cloud, you will be able to:</p>
             <ul className="list-disc list-inside space-y-1 text-sm">
               <li>Access your jokes from any device</li>
               <li>Never lose your data</li>
@@ -173,13 +167,11 @@ export function MigrationWizard({ onComplete }: MigrationWizardProps) {
             <CardTitle>Backup Your Data 💾</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p>
-              Before migrating, we recommend creating a backup of your local data.
-            </p>
+            <p>Before migrating, we recommend creating a backup of your local data.</p>
             <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
               <p className="text-sm">
-                ⚠️ <strong>Important:</strong> This backup will allow you to restore your data
-                if anything goes wrong during migration.
+                ⚠️ <strong>Important:</strong> This backup will allow you to restore your data if
+                anything goes wrong during migration.
               </p>
             </div>
             <div className="flex gap-3">
@@ -199,9 +191,7 @@ export function MigrationWizard({ onComplete }: MigrationWizardProps) {
             <CardTitle>Ready to Migrate 🚀</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p>
-              We are ready to migrate your data to the cloud. This process will:
-            </p>
+            <p>We are ready to migrate your data to the cloud. This process will:</p>
             <ul className="list-disc list-inside space-y-1 text-sm">
               <li>Upload your {jokeCount} jokes to the database</li>
               <li>Upload your {routineCount} routines to the database</li>
@@ -210,8 +200,12 @@ export function MigrationWizard({ onComplete }: MigrationWizardProps) {
             </ul>
             {error && (
               <div className="bg-red-50 p-4 rounded-lg border border-red-200 text-red-700">
-                <p><strong>Error:</strong> {error}</p>
-                <p className="text-sm mt-2">Please try again or contact support if the problem persists.</p>
+                <p>
+                  <strong>Error:</strong> {error}
+                </p>
+                <p className="text-sm mt-2">
+                  Please try again or contact support if the problem persists.
+                </p>
               </div>
             )}
             <div className="flex gap-3">

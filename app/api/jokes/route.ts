@@ -66,10 +66,7 @@ export async function GET() {
     return NextResponse.json({ jokes: transformedJokes });
   } catch (error) {
     console.error("Error fetching jokes:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch jokes" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to fetch jokes" }, { status: 500 });
   }
 }
 
@@ -126,10 +123,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ joke: transformedJoke }, { status: 201 });
   } catch (error) {
     console.error("Error creating joke:", error);
-    return NextResponse.json(
-      { error: "Failed to create joke" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to create joke" }, { status: 500 });
   }
 }
-

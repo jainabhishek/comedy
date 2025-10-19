@@ -11,13 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { formatDate, formatTime } from "@/lib/utils";
 import { getStructureById, getCategoryById } from "@/lib/structures";
-import type {
-  Joke,
-  JokeVersion,
-  JokeImprovement,
-  WeaknessReport,
-  Weakness,
-} from "@/lib/types";
+import type { Joke, JokeVersion, JokeImprovement, WeaknessReport, Weakness } from "@/lib/types";
 import { nanoid } from "nanoid";
 
 export default function JokeEditor({ params }: { params: Promise<{ id: string }> }) {
@@ -34,9 +28,13 @@ export default function JokeEditor({ params }: { params: Promise<{ id: string }>
   const [editedTags, setEditedTags] = useState<string[]>([]);
   const [editedTime, setEditedTime] = useState(30);
   const [editedEnergy, setEditedEnergy] = useState<"low" | "medium" | "high">("medium");
-  const [editedType, setEditedType] = useState<"observational" | "one-liner" | "story" | "callback" | "crowd-work">("observational");
-  const [editedStatus, setEditedStatus] = useState<"draft" | "working" | "polished" | "retired">("draft");
-  
+  const [editedType, setEditedType] = useState<
+    "observational" | "one-liner" | "story" | "callback" | "crowd-work"
+  >("observational");
+  const [editedStatus, setEditedStatus] = useState<"draft" | "working" | "polished" | "retired">(
+    "draft"
+  );
+
   const [showVersions, setShowVersions] = useState(false);
   const [showPerformances, setShowPerformances] = useState(false);
   const [aiSuggestion, setAiSuggestion] = useState<JokeImprovement | null>(null);
@@ -78,10 +76,21 @@ export default function JokeEditor({ params }: { params: Promise<{ id: string }>
         editedEnergy !== joke.energy ||
         editedType !== joke.type ||
         editedStatus !== joke.status;
-      
+
       setHasUnsavedChanges(hasChanges);
     }
-  }, [joke, editedSetup, editedPunchline, editedTitle, editedNotes, editedTags, editedTime, editedEnergy, editedType, editedStatus]);
+  }, [
+    joke,
+    editedSetup,
+    editedPunchline,
+    editedTitle,
+    editedNotes,
+    editedTags,
+    editedTime,
+    editedEnergy,
+    editedType,
+    editedStatus,
+  ]);
 
   if (jokesLoading || !jokeId) {
     return (
@@ -101,9 +110,7 @@ export default function JokeEditor({ params }: { params: Promise<{ id: string }>
           <div className="text-6xl mb-4">🔍</div>
           <h2 className="text-2xl font-bold mb-2">Joke Not Found</h2>
           <p className="text-muted mb-6">This joke doesn&apos;t exist or has been deleted.</p>
-          <Button onClick={() => router.push("/dashboard")}>
-            Back to Dashboard
-          </Button>
+          <Button onClick={() => router.push("/dashboard")}>Back to Dashboard</Button>
         </div>
       </div>
     );
@@ -152,7 +159,7 @@ export default function JokeEditor({ params }: { params: Promise<{ id: string }>
       editedPunchline,
       "Make this joke funnier and punchier"
     );
-    
+
     if (result) {
       setAiSuggestion(result);
     }
@@ -277,10 +284,17 @@ export default function JokeEditor({ params }: { params: Promise<{ id: string }>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex gap-2">
-                <Button onClick={handlePunchUp} disabled={aiLoading || !editedSetup || !editedPunchline}>
+                <Button
+                  onClick={handlePunchUp}
+                  disabled={aiLoading || !editedSetup || !editedPunchline}
+                >
                   ✨ Punch Up Joke
                 </Button>
-                <Button variant="secondary" onClick={handleAnalyze} disabled={aiLoading || !editedSetup || !editedPunchline}>
+                <Button
+                  variant="secondary"
+                  onClick={handleAnalyze}
+                  disabled={aiLoading || !editedSetup || !editedPunchline}
+                >
                   🔍 Analyze Weaknesses
                 </Button>
               </div>
@@ -385,7 +399,8 @@ export default function JokeEditor({ params }: { params: Promise<{ id: string }>
                   <p className="font-medium text-sm">{joke.structure.structureName}</p>
                   {joke.structure.structureId && getStructureById(joke.structure.structureId) && (
                     <Badge variant="outline" className="mt-2 text-xs">
-                      {getCategoryById(getStructureById(joke.structure.structureId)!.category)?.name || "Unknown Category"}
+                      {getCategoryById(getStructureById(joke.structure.structureId)!.category)
+                        ?.name || "Unknown Category"}
                     </Badge>
                   )}
                 </div>
@@ -395,9 +410,11 @@ export default function JokeEditor({ params }: { params: Promise<{ id: string }>
                     <div className="flex flex-wrap gap-1">
                       {joke.techniques.map((technique) => (
                         <Badge key={technique} variant="outline" className="text-xs">
-                          {technique === "irony-sarcasm" ? "Irony/Sarcasm" : 
-                           technique === "character-voice" ? "Character Voice" : 
-                           "Benign Violation"}
+                          {technique === "irony-sarcasm"
+                            ? "Irony/Sarcasm"
+                            : technique === "character-voice"
+                              ? "Character Voice"
+                              : "Benign Violation"}
                         </Badge>
                       ))}
                     </div>
@@ -485,7 +502,12 @@ export default function JokeEditor({ params }: { params: Promise<{ id: string }>
               </div>
               <div className="flex flex-wrap gap-2">
                 {editedTags.map((tag) => (
-                  <Badge key={tag} variant="outline" className="cursor-pointer" onClick={() => removeTag(tag)}>
+                  <Badge
+                    key={tag}
+                    variant="outline"
+                    className="cursor-pointer"
+                    onClick={() => removeTag(tag)}
+                  >
                     {tag} ×
                   </Badge>
                 ))}
@@ -498,7 +520,11 @@ export default function JokeEditor({ params }: { params: Promise<{ id: string }>
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle>Version History</CardTitle>
-                <Button variant="secondary" size="sm" onClick={() => setShowVersions(!showVersions)}>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => setShowVersions(!showVersions)}
+                >
                   {showVersions ? "Hide" : "Show"} ({joke.versions.length})
                 </Button>
               </div>
@@ -528,7 +554,11 @@ export default function JokeEditor({ params }: { params: Promise<{ id: string }>
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle>Performances</CardTitle>
-                <Button variant="secondary" size="sm" onClick={() => setShowPerformances(!showPerformances)}>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => setShowPerformances(!showPerformances)}
+                >
                   {showPerformances ? "Hide" : "Show"} ({joke.performances.length})
                 </Button>
               </div>
@@ -543,9 +573,13 @@ export default function JokeEditor({ params }: { params: Promise<{ id: string }>
                       <div className="flex items-center justify-between mb-1">
                         <Badge
                           variant={
-                            perf.outcome === "killed" ? "success" :
-                            perf.outcome === "worked" ? "default" :
-                            perf.outcome === "bombed" ? "warning" : "outline"
+                            perf.outcome === "killed"
+                              ? "success"
+                              : perf.outcome === "worked"
+                                ? "default"
+                                : perf.outcome === "bombed"
+                                  ? "warning"
+                                  : "outline"
                           }
                         >
                           {perf.outcome}

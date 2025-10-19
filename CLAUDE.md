@@ -11,6 +11,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Essential Commands
 
 **Development:**
+
 ```bash
 npm run dev          # Start dev server with Turbopack (http://localhost:3000)
 npm run build        # Production build with Turbopack
@@ -18,6 +19,7 @@ npm run start        # Start production server
 ```
 
 **Code Quality:**
+
 ```bash
 npm run lint         # Run ESLint
 npm run format       # Format all files with Prettier
@@ -25,6 +27,7 @@ npm run format:check # Check formatting without modifying
 ```
 
 **Database:**
+
 ```bash
 npx prisma generate  # Generate Prisma client after schema changes
 npx prisma db push   # Push schema changes to database (development)
@@ -61,6 +64,7 @@ The app uses NextAuth.js v5 with database sessions (not JWT). Key files:
 - `lib/security.ts` - Helper functions: `requireAuth()`, `requireOwnership()`, validation
 
 **Authentication patterns:**
+
 ```typescript
 // In API routes
 import { requireAuth } from "@/lib/security";
@@ -78,6 +82,7 @@ requireOwnership(user.id, resource.userId); // Throws if user doesn't own resour
 **Schema Location:** `prisma/schema.prisma`
 
 **Key Models:**
+
 - `User` - OAuth users (id, email, name, image)
 - `Joke` - Complete jokes with setup/punchline (user-scoped)
 - `JokeVersion` - Version history for jokes
@@ -87,17 +92,19 @@ requireOwnership(user.id, resource.userId); // Throws if user doesn't own resour
 - `UserSettings` - User preferences
 
 **Critical Database Patterns:**
+
 1. **User scoping** - All queries MUST filter by userId from session
 2. **Cascade deletes** - Relations use `onDelete: Cascade` for data integrity
 3. **Indexes** - Frequently queried fields have indexes (userId, status, createdAt)
 
 **Example query pattern:**
+
 ```typescript
 // ALWAYS scope by userId from session
 const jokes = await prisma.joke.findMany({
   where: { userId: user.id },
-  orderBy: { createdAt: 'desc' },
-  include: { versions: true, performances: true }
+  orderBy: { createdAt: "desc" },
+  include: { versions: true, performances: true },
 });
 ```
 
@@ -109,6 +116,7 @@ The app uses React Query for server state. Custom hooks in `hooks/`:
 - `useRoutinesQuery()` - Routines CRUD with optimistic updates
 
 **Pattern:**
+
 ```typescript
 const { jokes, loading, createJoke, updateJoke, deleteJoke } = useJokesQuery();
 
@@ -121,6 +129,7 @@ await createJoke({ title, setup, punchline, ... });
 **AI Service:** All AI operations go through API routes in `app/api/` (server-side only for security)
 
 **Key AI Routes:**
+
 - `POST /api/joke/generate` - Generate joke parts from premise
 - `POST /api/joke/improve` - Punch up existing jokes
 - `POST /api/joke/analyze` - Analyze weaknesses
@@ -129,11 +138,13 @@ await createJoke({ title, setup, punchline, ... });
 - `POST /api/performance/analyze` - Performance insights
 
 **AI Prompts & Guardrails:** `lib/ai-prompts.ts`
+
 - Task-scoped system prompts for each AI operation
 - Input validation to keep AI focused on comedy writing
 - Response parsing and cleanup helpers
 
 **Critical AI patterns:**
+
 1. **Never expose API key client-side** - All OpenAI calls happen in API routes
 2. **Use guardrails** - Validate inputs with `validateComedyInput()` before sending to AI
 3. **Parse responses** - AI returns JSON, strip markdown code blocks if present
@@ -143,6 +154,7 @@ await createJoke({ title, setup, punchline, ... });
 The workshop uses a structure-based approach (`lib/structures.ts`):
 
 **Categories:**
+
 - Core (6): Setup-punchline, rule of three, misdirection, PAAT, plant & payoff, callback
 - Wordplay (4): Pun, ambiguity, malapropism, spoonerism
 - Comparison (3): Analogy, hyperbole, juxtaposition
@@ -151,6 +163,7 @@ The workshop uses a structure-based approach (`lib/structures.ts`):
 - Topper (1): Tag stacking
 
 Each structure has:
+
 - `id`, `name`, `category`, `description`, `example`
 - `parts[]` - Multi-step parts with labels/descriptions
 - AI generates content for each part based on previous selections
@@ -174,7 +187,7 @@ export async function GET() {
     }
 
     const data = await prisma.model.findMany({
-      where: { userId: user.id }
+      where: { userId: user.id },
     });
 
     return NextResponse.json({ data });
@@ -203,11 +216,13 @@ const cleanTitle = sanitizeInput(body.title);
 ### Component Patterns
 
 **Page Structure:**
+
 - Most pages integrate components directly (no separate component files)
 - Use `"use client"` directive for client components with hooks
 - Async Server Components for initial data fetching
 
 **Conditional Layouts:**
+
 - `components/layout/ConditionalHeader` - Hides header on homepage
 - `components/layout/ConditionalMain` - Different container for homepage vs. app pages
 
@@ -314,7 +329,7 @@ CRITICAL: All database queries MUST be scoped by userId. Never allow users to ac
 ```typescript
 // CORRECT
 const jokes = await prisma.joke.findMany({
-  where: { userId: user.id }
+  where: { userId: user.id },
 });
 
 // INCORRECT - DO NOT DO THIS
@@ -391,6 +406,7 @@ prisma/
 ### Dev Server Already Running
 
 If `npm run dev` fails with "port already in use":
+
 ```bash
 # Check what's using port 3000
 lsof -i :3000
@@ -402,6 +418,7 @@ kill -9 <PID>
 ### Prisma Client Out of Sync
 
 If you see "Prisma Client is out of sync" errors:
+
 ```bash
 npx prisma generate
 ```

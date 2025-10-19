@@ -9,7 +9,9 @@ async function fetchJokes(): Promise<Joke[]> {
   return data.jokes;
 }
 
-async function createJoke(joke: Omit<Joke, "id" | "createdAt" | "updatedAt" | "versions" | "performances">): Promise<Joke> {
+async function createJoke(
+  joke: Omit<Joke, "id" | "createdAt" | "updatedAt" | "versions" | "performances">
+): Promise<Joke> {
   const res = await fetch("/api/jokes", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -65,16 +67,16 @@ export function useJokesQuery() {
   const deleteMutation = useMutation({
     mutationFn: deleteJoke,
     onSuccess: (_, id) => {
-      queryClient.setQueryData<Joke[]>(["jokes"], (old = []) =>
-        old.filter((j) => j.id !== id)
-      );
+      queryClient.setQueryData<Joke[]>(["jokes"], (old = []) => old.filter((j) => j.id !== id));
     },
   });
 
   return {
     jokes,
     loading,
-    createJoke: (joke: Omit<Joke, "id" | "createdAt" | "updatedAt" | "versions" | "performances">) => {
+    createJoke: (
+      joke: Omit<Joke, "id" | "createdAt" | "updatedAt" | "versions" | "performances">
+    ) => {
       return createMutation.mutateAsync(joke);
     },
     updateJoke: (id: string, updates: Partial<Joke>) => {
@@ -86,4 +88,3 @@ export function useJokesQuery() {
     getJoke: (id: string) => jokes.find((j) => j.id === id) || null,
   };
 }
-

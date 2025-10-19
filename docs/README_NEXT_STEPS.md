@@ -5,6 +5,7 @@
 In the last session, we completed **6 major steps** of Phase 15 (Authentication & Database Integration):
 
 ### ✅ Infrastructure Ready
+
 - **15 new files** created
 - **1,200+ lines** of production-ready code
 - **9 database models** defined
@@ -12,6 +13,7 @@ In the last session, we completed **6 major steps** of Phase 15 (Authentication 
 - **Beautiful UI** components built
 
 ### 🔐 Authentication System
+
 - NextAuth.js v5 with Google OAuth
 - Secure session management
 - Protected route middleware
@@ -19,6 +21,7 @@ In the last session, we completed **6 major steps** of Phase 15 (Authentication 
 - User menu with avatar
 
 ### 💾 Database Architecture
+
 - PostgreSQL via Supabase
 - Prisma ORM configured
 - Complete schema for multi-user app
@@ -30,6 +33,7 @@ In the last session, we completed **6 major steps** of Phase 15 (Authentication 
 Before we can continue, you need to complete these **one-time** setup steps:
 
 ### 1. Create Supabase Database (15 min)
+
 ```bash
 # Guide: SUPABASE_SETUP.md
 
@@ -40,6 +44,7 @@ Before we can continue, you need to complete these **one-time** setup steps:
 ```
 
 ### 2. Set Up Google OAuth (10 min)
+
 ```bash
 # Guide: SETUP_INSTRUCTIONS.md
 
@@ -50,6 +55,7 @@ Before we can continue, you need to complete these **one-time** setup steps:
 ```
 
 ### 3. Generate Secrets & Migrate (5 min)
+
 ```bash
 # Generate NextAuth secret
 openssl rand -base64 32
@@ -79,6 +85,7 @@ All guides are ready for you:
 Once you've finished the manual setup steps above, **let me know** and we'll continue with:
 
 ### Remaining Steps (Automated by Me):
+
 1. ✅ **Update 6 API routes** to use Prisma database
 2. ✅ **Migrate data hooks** to React Query (useJokes, useRoutines)
 3. ✅ **Create migration wizard** to move LocalStorage data to cloud
@@ -87,6 +94,7 @@ Once you've finished the manual setup steps above, **let me know** and we'll con
 6. ✅ **Deploy** with environment variables
 
 ### What You'll Have:
+
 - 🔐 **Multi-user authentication** via Google
 - ☁️ **Cloud database** storage (Supabase)
 - 🔄 **Data sync** across devices
@@ -99,7 +107,7 @@ Once you've finished the manual setup steps above, **let me know** and we'll con
 # 1. Update .env.local with:
 #    - DATABASE_URL from Supabase
 #    - GOOGLE_CLIENT_ID from Google Console
-#    - GOOGLE_CLIENT_SECRET from Google Console  
+#    - GOOGLE_CLIENT_SECRET from Google Console
 #    - NEXTAUTH_SECRET from openssl
 
 # 2. Run migrations
@@ -142,6 +150,7 @@ After completing the setup, just say:
 > "Setup complete! Ready to continue Phase 15"
 
 And I'll immediately continue with:
+
 - Migrating API routes to database
 - Implementing React Query
 - Creating the migration wizard
@@ -152,7 +161,7 @@ And I'll immediately continue with:
 **You've got this!** The hard architectural decisions are done. Now it's just following the guides and configuring your accounts. See you on the other side! 🚀
 
 **Files to read:**
+
 1. Start with: `SETUP_INSTRUCTIONS.md`
 2. For Supabase help: `SUPABASE_SETUP.md`
 3. For status: `PHASE15_PROGRESS.md`
-

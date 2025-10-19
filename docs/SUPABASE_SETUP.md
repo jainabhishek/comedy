@@ -64,6 +64,7 @@ In your Supabase dashboard:
 ## Step 5: Generate NEXTAUTH_SECRET
 
 Run this command in your terminal:
+
 ```bash
 openssl rand -base64 32
 ```
@@ -73,11 +74,13 @@ Copy the output and paste it as your `NEXTAUTH_SECRET` in `.env.local`
 ## Next Steps
 
 Once you've completed these steps:
+
 1. ✅ Supabase project created
 2. ✅ Database connection string added to `.env.local`
 3. ✅ NEXTAUTH_SECRET generated and added
 
 The setup script will automatically:
+
 - Initialize Prisma with Supabase
 - Create database schema
 - Run migrations
@@ -96,4 +99,3 @@ The setup script will automatically:
 
 - Supabase Docs: https://supabase.com/docs
 - Supabase Discord: https://discord.supabase.com
-

@@ -5,10 +5,7 @@ const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElemen
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn(
-        "glass glass-hover rounded-2xl text-foreground animate-fade-in",
-        className
-      )}
+      className={cn("glass glass-hover rounded-2xl text-foreground animate-fade-in", className)}
       {...props}
     />
   )

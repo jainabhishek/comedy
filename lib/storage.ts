@@ -1,10 +1,4 @@
-import type {
-  Joke,
-  Routine,
-  Premise,
-  Performance,
-  StorageData,
-} from "./types";
+import type { Joke, Routine, Premise, Performance, StorageData } from "./types";
 import { safeJsonParse, safeJsonStringify } from "./utils";
 
 const STORAGE_KEY = "comedy-app-data";

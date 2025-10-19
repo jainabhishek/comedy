@@ -57,7 +57,9 @@ export function Header() {
 
           <div className="flex items-center gap-4">
             {!isHomepage && (
-              <span className="hidden lg:block text-xs text-muted/70">AI-Powered Comedy Writing</span>
+              <span className="hidden lg:block text-xs text-muted/70">
+                AI-Powered Comedy Writing
+              </span>
             )}
             {isHomepage && status !== "loading" && !session ? (
               <Link href="/auth/signin">

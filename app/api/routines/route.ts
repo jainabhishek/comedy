@@ -36,10 +36,7 @@ export async function GET() {
     // Transform database format to app format
     const transformedRoutines = routines.map((routine) => {
       const jokeIds = routine.jokes.map((rj) => rj.jokeId);
-      const currentTime = routine.jokes.reduce(
-        (sum, rj) => sum + rj.joke.estimatedTime,
-        0
-      );
+      const currentTime = routine.jokes.reduce((sum, rj) => sum + rj.joke.estimatedTime, 0);
 
       return {
         id: routine.id,
@@ -56,10 +53,7 @@ export async function GET() {
     return NextResponse.json({ routines: transformedRoutines });
   } catch (error) {
     console.error("Error fetching routines:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch routines" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to fetch routines" }, { status: 500 });
   }
 }
 
@@ -112,10 +106,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ routine: transformedRoutine }, { status: 201 });
   } catch (error) {
     console.error("Error creating routine:", error);
-    return NextResponse.json(
-      { error: "Failed to create routine" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to create routine" }, { status: 500 });
   }
 }
-

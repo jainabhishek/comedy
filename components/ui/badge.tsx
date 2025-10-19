@@ -19,7 +19,8 @@ const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
             "bg-warning text-white hover:brightness-110": variant === "warning",
             "bg-error text-white hover:brightness-110": variant === "error",
             "bg-info text-white hover:brightness-110": variant === "info",
-            "border border-glass-border backdrop-blur-md bg-glass-bg/50 text-foreground": variant === "outline",
+            "border border-glass-border backdrop-blur-md bg-glass-bg/50 text-foreground":
+              variant === "outline",
             "glass text-foreground": variant === "glass",
           },
           className

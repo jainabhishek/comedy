@@ -2,7 +2,14 @@ import React from "react";
 import { cn } from "@/lib/utils";
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "default" | "outline" | "ghost" | "destructive" | "secondary" | "glass" | "outline-glass";
+  variant?:
+    | "default"
+    | "outline"
+    | "ghost"
+    | "destructive"
+    | "secondary"
+    | "glass"
+    | "outline-glass";
   size?: "default" | "sm" | "lg" | "icon";
 }
 
@@ -19,13 +26,15 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           "relative overflow-hidden",
           {
             // Primary variant with glass effect
-            "bg-primary text-white shadow-glass-lg hover:shadow-glass-xl hover:scale-[1.02] hover:bg-primary-dark active:scale-[0.98]": variant === "default",
+            "bg-primary text-white shadow-glass-lg hover:shadow-glass-xl hover:scale-[1.02] hover:bg-primary-dark active:scale-[0.98]":
+              variant === "default",
 
             // Glass variant - Frosted glass with backdrop blur
             "glass glass-hover text-foreground shadow-glass": variant === "glass",
 
             // Outline glass variant
-            "border-2 border-primary/30 text-primary backdrop-blur-md bg-glass-bg/50 hover:bg-glass-hover-bg hover:border-primary/50 shadow-glass": variant === "outline-glass",
+            "border-2 border-primary/30 text-primary backdrop-blur-md bg-glass-bg/50 hover:bg-glass-hover-bg hover:border-primary/50 shadow-glass":
+              variant === "outline-glass",
 
             // Standard outline
             "border-2 border-primary text-primary hover:bg-primary hover:text-white shadow-glass":
@@ -35,10 +44,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             "hover:glass hover:shadow-glass text-foreground": variant === "ghost",
 
             // Destructive with glass effect
-            "bg-error text-white shadow-glass-lg hover:shadow-glass-xl hover:scale-[1.02] active:scale-[0.98]": variant === "destructive",
+            "bg-error text-white shadow-glass-lg hover:shadow-glass-xl hover:scale-[1.02] active:scale-[0.98]":
+              variant === "destructive",
 
             // Secondary with glass
-            "bg-secondary text-white shadow-glass-lg hover:shadow-glass-xl hover:scale-[1.02] hover:bg-secondary-dark active:scale-[0.98]": variant === "secondary",
+            "bg-secondary text-white shadow-glass-lg hover:shadow-glass-xl hover:scale-[1.02] hover:bg-secondary-dark active:scale-[0.98]":
+              variant === "secondary",
           },
           {
             "h-10 px-4 py-2 text-sm": size === "default",

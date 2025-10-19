@@ -5,18 +5,21 @@ An AI-powered web application that helps comedians develop jokes from premises, 
 ## ✨ Features
 
 ### 🎭 Joke Workshop
+
 - **AI-Assisted Joke Creation**: Transform premises into complete jokes with AI-generated setups and punchlines
 - **Multiple Variations**: Generate multiple options for setups and punchlines
 - **Smart Tag Suggestions**: AI recommends tags, toppers, and callbacks
 - **Step-by-Step Flow**: Guided process from premise to polished joke
 
 ### ✏️ Joke Management
+
 - **Comprehensive Dashboard**: View all jokes with search and filtering
 - **Version History**: Track iterations and changes to jokes
 - **Performance Tracking**: Record how jokes perform in practice and live shows
 - **Status Management**: Track jokes as draft, working, polished, or retired
 
 ### 🎯 Routine Builder
+
 - **Visual Routine Construction**: Drag-and-drop interface for building sets
 - **AI Flow Analysis**: Get intelligent feedback on routine structure
 - **5-Minute Target**: Visual indicators for time management
@@ -24,12 +27,14 @@ An AI-powered web application that helps comedians develop jokes from premises, 
 - **Callback Detection**: AI identifies callback opportunities between jokes
 
 ### 📊 AI Intelligence
+
 - **Joke Analysis**: AI identifies weaknesses and suggests improvements
 - **Routine Optimization**: AI suggests optimal joke ordering
 - **Performance Insights**: Pattern detection in what works and what doesn't
 - **Smart Placement**: AI recommends where new jokes fit best
 
 ### 🛡️ AI Guardrails
+
 - Task-scoped system prompts keep AI focused on comedy writing
 - Input validation prevents off-topic requests
 - Context-aware responses specific to each feature
@@ -49,12 +54,14 @@ An AI-powered web application that helps comedians develop jokes from premises, 
 ### Quick Start (MVP - LocalStorage)
 
 1. **Clone the repository**
+
 ```bash
 git clone <repo-url>
 cd comedy
 ```
 
 2. **Install dependencies**
+
 ```bash
 npm install
 ```
@@ -72,6 +79,7 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
 4. **Run the development server**
+
 ```bash
 npm run dev
 ```
@@ -133,6 +141,7 @@ comedy/
 ## 🎨 Key Features Implemented
 
 ### ✅ Completed
+
 - **Core Infrastructure**
   - TypeScript type definitions for all data models
   - LocalStorage service with export/import
@@ -163,6 +172,7 @@ comedy/
   - Routines list page
 
 ### 🚧 To Be Implemented (Future Enhancements)
+
 - Joke Editor with version history
 - Full Routine Builder with drag-and-drop
 - Smart Placement Assistant modal
@@ -227,6 +237,7 @@ npm run start
 ## 🎭 For Comedians
 
 This app is designed to help you:
+
 - Organize your material
 - Develop jokes systematically
 - Build tight sets

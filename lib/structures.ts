@@ -2,12 +2,16 @@ import type { JokeStructure } from "./types";
 
 // Category definitions for organizing joke structures
 export const STRUCTURE_CATEGORIES = [
-  { id: 'core', name: 'Core Blueprints', description: 'Foundational joke patterns' },
-  { id: 'wordplay', name: 'Wordplay & Language', description: 'Puns, double meanings, word flips' },
-  { id: 'comparison', name: 'Comparison Engines', description: 'Analogies, exaggeration, contrast' },
-  { id: 'narrative', name: 'Narrative & Timing', description: 'Story-based structures' },
-  { id: 'call-response', name: 'Call-and-Response', description: 'Question-answer formats' },
-  { id: 'topper', name: 'Topper', description: 'Stacking multiple punchlines' }
+  { id: "core", name: "Core Blueprints", description: "Foundational joke patterns" },
+  { id: "wordplay", name: "Wordplay & Language", description: "Puns, double meanings, word flips" },
+  {
+    id: "comparison",
+    name: "Comparison Engines",
+    description: "Analogies, exaggeration, contrast",
+  },
+  { id: "narrative", name: "Narrative & Timing", description: "Story-based structures" },
+  { id: "call-response", name: "Call-and-Response", description: "Question-answer formats" },
+  { id: "topper", name: "Topper", description: "Stacking multiple punchlines" },
 ];
 
 // All 21 comedy blueprint structures
@@ -86,7 +90,8 @@ export const JOKE_STRUCTURES: JokeStructure[] = [
     id: "premise-angle-actout-tags",
     name: "Premise → Angle → Act-Out → Tags",
     category: "core",
-    example: "Group chats feel like meetings. Except nobody reads the agenda. (glancing at phone) 'Any updates?' … 'Yes—memes.' Minutes will be published as screenshots.",
+    example:
+      "Group chats feel like meetings. Except nobody reads the agenda. (glancing at phone) 'Any updates?' … 'Yes—memes.' Minutes will be published as screenshots.",
     summary: "Full premise with fresh angle, acted moment, and quick tags.",
     parts: [
       {
@@ -119,7 +124,8 @@ export const JOKE_STRUCTURES: JokeStructure[] = [
     id: "plant-and-payoff",
     name: "Plant & Payoff (Call-forward)",
     category: "core",
-    example: "Mention your fear of geese early; 10 minutes later your 'heroic escape' is foiled… by a goose.",
+    example:
+      "Mention your fear of geese early; 10 minutes later your 'heroic escape' is foiled… by a goose.",
     summary: "Plant a detail early; cash it in later with a twist.",
     parts: [
       {
@@ -270,7 +276,8 @@ export const JOKE_STRUCTURES: JokeStructure[] = [
     id: "exaggeration-hyperbole",
     name: "Exaggeration (Hyperbole) / Understatement",
     category: "comparison",
-    example: "I waited so long my phone aged out of updates. (hyperbole) OR The rent is… noticeable. (understatement)",
+    example:
+      "I waited so long my phone aged out of updates. (hyperbole) OR The rent is… noticeable. (understatement)",
     summary: "Amplify or minimize for comic effect.",
     parts: [
       {
@@ -291,7 +298,8 @@ export const JOKE_STRUCTURES: JokeStructure[] = [
     id: "juxtaposition-contrast",
     name: "Juxtaposition / Contrast",
     category: "comparison",
-    example: "My smartwatch congratulates me for standing. My landlord congratulates me for paying.",
+    example:
+      "My smartwatch congratulates me for standing. My landlord congratulates me for paying.",
     summary: "Place opposites together to reveal absurdity.",
     parts: [
       {
@@ -455,7 +463,8 @@ export const JOKE_STRUCTURES: JokeStructure[] = [
     name: "Knock-Knock",
     category: "call-response",
     example: "Knock knock. Who's there? Interrupting cow. Interrupting cow w— MOOO!",
-    summary: "Classic call-and-response pun vehicle. Works best for kids' humor or deliberate retro/meta bits.",
+    summary:
+      "Classic call-and-response pun vehicle. Works best for kids' humor or deliberate retro/meta bits.",
     parts: [
       {
         id: "knock-setup",
@@ -483,7 +492,8 @@ export const JOKE_STRUCTURES: JokeStructure[] = [
     id: "topper-tag-stacking",
     name: "Topper / Tag Stacking",
     category: "topper",
-    example: "I meditate daily. It's like napping, but with branding. With candles. And an app subscription.",
+    example:
+      "I meditate daily. It's like napping, but with branding. With candles. And an app subscription.",
     summary: "Punchline lands → add 1–3 shorter punches that escalate.",
     parts: [
       {

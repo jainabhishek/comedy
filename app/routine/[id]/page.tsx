@@ -38,13 +38,13 @@ export default function RoutineBuilder({ params }: { params: Promise<{ id: strin
     if (foundRoutine) {
       setRoutine(foundRoutine);
       setEditedName(foundRoutine.name);
-      
+
       // Load jokes in routine
       const jokesInRoutine = foundRoutine.jokeIds
         .map((id) => jokes.find((j) => j.id === id))
         .filter((j): j is Joke => j !== undefined);
       setRoutineJokes(jokesInRoutine);
-      
+
       // Load available jokes (not in routine)
       const available = jokes.filter((j) => !foundRoutine.jokeIds.includes(j.id));
       setAvailableJokes(available);
@@ -136,35 +136,43 @@ export default function RoutineBuilder({ params }: { params: Promise<{ id: strin
   };
 
   const handleOptimize = async () => {
-    const jokesData: RoutineJokeSummary[] = routineJokes.map((j): RoutineJokeSummary => ({
-      id: j.id,
-      title: j.title,
-      energy: j.energy,
-      type: j.type,
-      estimatedTime: j.estimatedTime,
-    }));
+    const jokesData: RoutineJokeSummary[] = routineJokes.map(
+      (j): RoutineJokeSummary => ({
+        id: j.id,
+        title: j.title,
+        energy: j.energy,
+        type: j.type,
+        estimatedTime: j.estimatedTime,
+      })
+    );
 
     const result = await optimizeRoutine(jokesData);
-    
+
     if (result && result.optimizedOrder) {
       const optimized = result.optimizedOrder
         .map((id) => routineJokes.find((j) => j.id === id))
         .filter((j): j is Joke => j !== undefined);
-      
-      if (confirm(`AI suggests reordering for better flow. Apply changes?\n\nReason: ${result.reasoning}`)) {
+
+      if (
+        confirm(
+          `AI suggests reordering for better flow. Apply changes?\n\nReason: ${result.reasoning}`
+        )
+      ) {
         setRoutineJokes(optimized);
       }
     }
   };
 
   const handleAnalyze = async () => {
-    const jokesData: RoutineJokeSummary[] = routineJokes.map((j): RoutineJokeSummary => ({
-      id: j.id,
-      title: j.title,
-      energy: j.energy,
-      type: j.type,
-      estimatedTime: j.estimatedTime,
-    }));
+    const jokesData: RoutineJokeSummary[] = routineJokes.map(
+      (j): RoutineJokeSummary => ({
+        id: j.id,
+        title: j.title,
+        energy: j.energy,
+        type: j.type,
+        estimatedTime: j.estimatedTime,
+      })
+    );
 
     const result = await analyzeRoutine(jokesData);
     if (result) {
@@ -180,9 +188,10 @@ export default function RoutineBuilder({ params }: { params: Promise<{ id: strin
     }
   };
 
-  const filteredAvailable = availableJokes.filter((joke) =>
-    joke.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    joke.setup.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredAvailable = availableJokes.filter(
+    (joke) =>
+      joke.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      joke.setup.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -225,9 +234,7 @@ export default function RoutineBuilder({ params }: { params: Promise<{ id: strin
                   <span className="text-sm font-medium">
                     Time: {formatTime(totalTime)} / {formatTime(targetTime)}
                   </span>
-                  <span className="text-sm text-muted">
-                    {routineJokes.length} jokes
-                  </span>
+                  <span className="text-sm text-muted">{routineJokes.length} jokes</span>
                 </div>
                 <div className="w-full h-4 bg-gray-200 rounded-full overflow-hidden">
                   <div
@@ -235,8 +242,8 @@ export default function RoutineBuilder({ params }: { params: Promise<{ id: strin
                       timePercent > 100
                         ? "bg-red-500"
                         : timePercent > 90
-                        ? "bg-yellow-500"
-                        : "bg-green-500"
+                          ? "bg-yellow-500"
+                          : "bg-green-500"
                     }`}
                     style={{ width: `${Math.min(timePercent, 100)}%` }}
                   />
@@ -269,7 +276,10 @@ export default function RoutineBuilder({ params }: { params: Promise<{ id: strin
                   <div className="space-y-2">
                     <p className="text-sm font-medium">Suggestions:</p>
                     {flowAnalysis.suggestions.slice(0, 3).map((suggestion, index) => (
-                      <div key={`${suggestion.type}-${index}`} className="text-sm p-2 bg-white rounded border">
+                      <div
+                        key={`${suggestion.type}-${index}`}
+                        className="text-sm p-2 bg-white rounded border"
+                      >
                         <p className="font-medium">{suggestion.type}</p>
                         <p className="text-muted">{suggestion.reason}</p>
                       </div>
@@ -278,7 +288,9 @@ export default function RoutineBuilder({ params }: { params: Promise<{ id: strin
                 )}
                 {flowAnalysis.callbacks?.length > 0 && (
                   <div>
-                    <p className="text-sm font-medium">Callback Opportunities: {flowAnalysis.callbacks.length}</p>
+                    <p className="text-sm font-medium">
+                      Callback Opportunities: {flowAnalysis.callbacks.length}
+                    </p>
                   </div>
                 )}
               </div>
@@ -307,7 +319,9 @@ export default function RoutineBuilder({ params }: { params: Promise<{ id: strin
                       ref={provided.innerRef}
                       {...provided.droppableProps}
                       className={`min-h-[400px] space-y-2 p-2 rounded-lg transition-colors ${
-                        snapshot.isDraggingOver ? "bg-primary/5 border-2 border-primary border-dashed" : ""
+                        snapshot.isDraggingOver
+                          ? "bg-primary/5 border-2 border-primary border-dashed"
+                          : ""
                       }`}
                     >
                       {filteredAvailable.length === 0 ? (
@@ -365,13 +379,17 @@ export default function RoutineBuilder({ params }: { params: Promise<{ id: strin
                       ref={provided.innerRef}
                       {...provided.droppableProps}
                       className={`min-h-[400px] space-y-2 p-2 rounded-lg transition-colors ${
-                        snapshot.isDraggingOver ? "bg-secondary/5 border-2 border-secondary border-dashed" : ""
+                        snapshot.isDraggingOver
+                          ? "bg-secondary/5 border-2 border-secondary border-dashed"
+                          : ""
                       }`}
                     >
                       {routineJokes.length === 0 ? (
                         <div className="text-center py-12 border-2 border-dashed rounded-lg">
                           <p className="text-2xl mb-2">👈</p>
-                          <p className="text-muted">Drag jokes from the left to build your routine</p>
+                          <p className="text-muted">
+                            Drag jokes from the left to build your routine
+                          </p>
                         </div>
                       ) : (
                         routineJokes.map((joke, index) => (
@@ -399,7 +417,9 @@ export default function RoutineBuilder({ params }: { params: Promise<{ id: strin
                                         ✕
                                       </button>
                                     </div>
-                                    <p className="text-xs text-muted line-clamp-2 mb-2">{joke.setup}</p>
+                                    <p className="text-xs text-muted line-clamp-2 mb-2">
+                                      {joke.setup}
+                                    </p>
                                     <div className="flex gap-2">
                                       <Badge variant="outline" className="text-xs">
                                         {formatTime(joke.estimatedTime)}
@@ -443,9 +463,9 @@ export default function RoutineBuilder({ params }: { params: Promise<{ id: strin
                     joke.energy === "high"
                       ? "bg-red-500"
                       : joke.energy === "medium"
-                      ? "bg-yellow-500"
-                      : "bg-blue-500";
-                  
+                        ? "bg-yellow-500"
+                        : "bg-blue-500";
+
                   return (
                     <div
                       key={joke.id}

@@ -149,9 +149,7 @@ export function validateComedyInput(input: string): boolean {
   const lowerInput = trimmed.toLowerCase();
 
   // Block only clearly off-topic prompts so the experience stays open-ended.
-  const hasOffTopicKeyword = OFF_TOPIC_KEYWORDS.some((keyword) =>
-    matchesKeyword(trimmed, keyword)
-  );
+  const hasOffTopicKeyword = OFF_TOPIC_KEYWORDS.some((keyword) => matchesKeyword(trimmed, keyword));
 
   if (hasOffTopicKeyword) {
     return false;
@@ -163,9 +161,7 @@ export function validateComedyInput(input: string): boolean {
   }
 
   // Longer briefs should mention something comedy-adjacent, but stay generous.
-  const hasComedyKeyword = COMEDY_KEYWORDS.some((keyword) =>
-    lowerInput.includes(keyword)
-  );
+  const hasComedyKeyword = COMEDY_KEYWORDS.some((keyword) => lowerInput.includes(keyword));
 
   if (hasComedyKeyword) {
     return true;
@@ -212,10 +208,7 @@ Return ONLY a JSON array (no markdown, no code blocks):
 ["punchline 1", "punchline 2", "punchline 3", "punchline 4", "punchline 5"]`;
 }
 
-function formatPriorSelections(
-  structureId: string,
-  priorSelections: SelectedPartOption[]
-): string {
+function formatPriorSelections(structureId: string, priorSelections: SelectedPartOption[]): string {
   if (priorSelections.length === 0) {
     return "No prior parts have been finalized yet.";
   }
@@ -265,7 +258,7 @@ export function buildStructurePartPrompt(params: {
   );
 
   // Add structure example for context
-  const exampleContext = structure.example 
+  const exampleContext = structure.example
     ? `\nStructure Example: "${structure.example}"\nUse this as inspiration for the style and approach.`
     : "";
 
@@ -273,15 +266,17 @@ export function buildStructurePartPrompt(params: {
   let techniqueGuidance = "";
   if (params.techniques && params.techniques.length > 0) {
     const techniqueDescriptions = {
-      "irony-sarcasm": "Use an ironic or sarcastic tone - say the opposite of what you mean for comedic effect.",
+      "irony-sarcasm":
+        "Use an ironic or sarcastic tone - say the opposite of what you mean for comedic effect.",
       "character-voice": "Consider using different character voices or personas for contrast.",
-      "benign-violation": "Tease boundaries mindfully - push limits while keeping it relatable and safe."
+      "benign-violation":
+        "Tease boundaries mindfully - push limits while keeping it relatable and safe.",
     };
-    
+
     const applicableTechniques = params.techniques
-      .map(tech => techniqueDescriptions[tech])
+      .map((tech) => techniqueDescriptions[tech])
       .join(" ");
-    
+
     techniqueGuidance = `\n\nTechnique Overlays: ${applicableTechniques}`;
   }
 
@@ -298,11 +293,7 @@ Return ONLY a JSON array (no markdown, no code blocks):
 ["option 1", "option 2", "option 3"]`;
 }
 
-export function improveJokePrompt(
-  setup: string,
-  punchline: string,
-  direction: string
-): string {
+export function improveJokePrompt(setup: string, punchline: string, direction: string): string {
   return `Current joke:
 Setup: "${setup}"
 Punchline: "${punchline}"

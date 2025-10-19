@@ -9,7 +9,7 @@ export default function SignIn() {
     // Get the callback URL from query params, default to dashboard
     const urlParams = new URLSearchParams(window.location.search);
     const callbackUrl = urlParams.get("callbackUrl") || "/dashboard";
-    
+
     await signIn("google", {
       callbackUrl,
     });
@@ -32,8 +32,8 @@ export default function SignIn() {
             <CardDescription>Sign in to continue crafting your killer set</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <Button 
-              onClick={handleGoogleSignIn} 
+            <Button
+              onClick={handleGoogleSignIn}
               className="w-full flex items-center justify-center gap-2"
               size="lg"
             >
@@ -63,9 +63,7 @@ export default function SignIn() {
                 <span className="w-full border-t" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted">
-                  Secure authentication
-                </span>
+                <span className="bg-background px-2 text-muted">Secure authentication</span>
               </div>
             </div>
 

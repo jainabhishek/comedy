@@ -53,7 +53,10 @@ export function sanitizeInput(input: string): string {
 /**
  * Validate joke data
  */
-export function validateJokeData(data: JokeValidationPayload): { valid: boolean; errors: string[] } {
+export function validateJokeData(data: JokeValidationPayload): {
+  valid: boolean;
+  errors: string[];
+} {
   const errors: string[] = [];
 
   const title = data.title;
@@ -123,7 +126,10 @@ export function validateJokeData(data: JokeValidationPayload): { valid: boolean;
 /**
  * Validate routine data
  */
-export function validateRoutineData(data: RoutineValidationPayload): { valid: boolean; errors: string[] } {
+export function validateRoutineData(data: RoutineValidationPayload): {
+  valid: boolean;
+  errors: string[];
+} {
   const errors: string[] = [];
 
   const name = data.name;
@@ -186,35 +192,19 @@ export function handleApiError(error: unknown): NextResponse {
 
   if (error instanceof Error) {
     if (error.message === "Unauthorized") {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     if (error.message.startsWith("Forbidden")) {
-      return NextResponse.json(
-        { error: error.message },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: error.message }, { status: 403 });
     }
 
     if (error.message.includes("not found")) {
-      return NextResponse.json(
-        { error: "Resource not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Resource not found" }, { status: 404 });
     }
 
-    return NextResponse.json(
-      { error: error.message },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: error.message }, { status: 400 });
   }
 
-  return NextResponse.json(
-    { error: "Internal server error" },
-    { status: 500 }
-  );
+  return NextResponse.json({ error: "Internal server error" }, { status: 500 });
 }
-

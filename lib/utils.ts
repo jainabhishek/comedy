@@ -121,9 +121,7 @@ export function toTitleCase(str: string): string {
 }
 
 // Performance Rating Calculation
-export function calculatePerformanceRating(
-  performances: Array<{ outcome: string }>
-): number {
+export function calculatePerformanceRating(performances: Array<{ outcome: string }>): number {
   if (performances.length === 0) return 0;
 
   const outcomeScores = {
@@ -205,9 +203,7 @@ export function getEnergyColor(energy: "low" | "medium" | "high"): string {
   return colors[energy];
 }
 
-export function getStatusColor(
-  status: "draft" | "working" | "polished" | "retired"
-): string {
+export function getStatusColor(status: "draft" | "working" | "polished" | "retired"): string {
   const colors = {
     draft: "text-gray-600",
     working: "text-amber-600",
@@ -217,9 +213,7 @@ export function getStatusColor(
   return colors[status];
 }
 
-export function getOutcomeColor(
-  outcome: "killed" | "worked" | "bombed" | "neutral"
-): string {
+export function getOutcomeColor(outcome: "killed" | "worked" | "bombed" | "neutral"): string {
   const colors = {
     killed: "text-green-600",
     worked: "text-blue-600",

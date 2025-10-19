@@ -5,6 +5,7 @@
 Completely removed the header from the homepage to create a full, immersive landing page experience.
 
 ### Before
+
 ```
 ┌──────────────────────────────────────┐
 │  🎤 Tight 5           [Sign In Button] │ ← Header visible
@@ -16,6 +17,7 @@ Completely removed the header from the homepage to create a full, immersive land
 ```
 
 ### After
+
 ```
 ┌──────────────────────────────────────┐
 │                                       │ ← No header!
@@ -28,6 +30,7 @@ Completely removed the header from the homepage to create a full, immersive land
 ## 📁 Files Created/Modified
 
 ### New Files
+
 1. **`components/layout/conditional-header.tsx`**
    - Client component that checks pathname
    - Returns `null` on homepage (`/`)
@@ -39,6 +42,7 @@ Completely removed the header from the homepage to create a full, immersive land
    - Container with padding on app pages
 
 ### Modified Files
+
 3. **`app/layout.tsx`**
    - Import `ConditionalHeader` instead of `Header`
    - Import `ConditionalMain` instead of inline `<main>`
@@ -47,6 +51,7 @@ Completely removed the header from the homepage to create a full, immersive land
 ## 🔧 Technical Implementation
 
 ### ConditionalHeader Component
+
 ```typescript
 "use client";
 
@@ -67,6 +72,7 @@ export function ConditionalHeader() {
 ```
 
 ### ConditionalMain Component
+
 ```typescript
 "use client";
 
@@ -90,12 +96,14 @@ export function ConditionalMain({ children }: { children: ReactNode }) {
 ## ✅ Result
 
 ### Homepage Experience
+
 - ✅ **No header** - Clean, uninterrupted design
 - ✅ **Full width** - Content spans edge-to-edge
 - ✅ **No container padding** - Maximum visual impact
 - ✅ **Perfect for hero sections** - Immersive landing page
 
 ### App Pages Experience
+
 - ✅ **Header visible** - Full navigation menu
 - ✅ **Container layout** - Centered content with padding
 - ✅ **User menu** - Profile and sign out
@@ -112,6 +120,7 @@ export function ConditionalMain({ children }: { children: ReactNode }) {
 ## 🚀 Usage
 
 The changes are automatic based on the URL path:
+
 - Visit `/` → No header, full width
 - Visit `/dashboard` → Header visible, container layout
 - Visit `/workshop` → Header visible, container layout
@@ -120,6 +129,7 @@ The changes are automatic based on the URL path:
 ## 📝 Next Steps (Optional)
 
 Consider adding a custom navigation to your homepage:
+
 - Floating "Sign In" button in top-right corner
 - Sticky CTA in hero section
 - Footer with sign-in link
@@ -127,4 +137,3 @@ Consider adding a custom navigation to your homepage:
 ---
 
 **Your homepage is now a beautiful, full-screen landing page!** 🎉
-

@@ -6,7 +6,11 @@ interface UseTimerOptions {
   onComplete?: () => void;
 }
 
-export function useTimer({ initialTime = 300, countdown = true, onComplete }: UseTimerOptions = {}) {
+export function useTimer({
+  initialTime = 300,
+  countdown = true,
+  onComplete,
+}: UseTimerOptions = {}) {
   const [time, setTime] = useState(initialTime);
   const [isRunning, setIsRunning] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);

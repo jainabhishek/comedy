@@ -130,9 +130,7 @@ export function useJokes() {
       }
 
       if (filters.tags && filters.tags.length > 0) {
-        filtered = filtered.filter((j) =>
-          filters.tags!.some((tag) => j.tags.includes(tag))
-        );
+        filtered = filtered.filter((j) => filters.tags!.some((tag) => j.tags.includes(tag)));
       }
 
       if (filters.search) {

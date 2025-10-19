@@ -1,4 +1,4 @@
-import { ImageResponse } from 'next/og';
+import { ImageResponse } from "next/og";
 
 // Image metadata
 export const size = {
@@ -6,7 +6,7 @@ export const size = {
   height: 180,
 };
 
-export const contentType = 'image/png';
+export const contentType = "image/png";
 
 // Apple icon generation
 export default function AppleIcon() {
@@ -15,13 +15,13 @@ export default function AppleIcon() {
       <div
         style={{
           fontSize: 120,
-          background: '#007AFF',
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderRadius: '20%',
+          background: "#007AFF",
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: "20%",
         }}
       >
         🎤

@@ -34,12 +34,8 @@ export async function POST(request: Request) {
             type: localJoke.type || "observational",
             status: localJoke.status || "draft",
             notes: localJoke.notes || "",
-            createdAt: localJoke.createdAt
-              ? new Date(localJoke.createdAt)
-              : new Date(),
-            updatedAt: localJoke.updatedAt
-              ? new Date(localJoke.updatedAt)
-              : new Date(),
+            createdAt: localJoke.createdAt ? new Date(localJoke.createdAt) : new Date(),
+            updatedAt: localJoke.updatedAt ? new Date(localJoke.updatedAt) : new Date(),
           },
         });
 
@@ -56,19 +52,14 @@ export async function POST(request: Request) {
                 punchline: version.punchline,
                 tags: version.tags || [],
                 notes: version.notes || "",
-                createdAt: version.createdAt
-                  ? new Date(version.createdAt)
-                  : new Date(),
+                createdAt: version.createdAt ? new Date(version.createdAt) : new Date(),
               },
             });
           }
         }
 
         // Migrate performances
-        if (
-          localJoke.performances &&
-          Array.isArray(localJoke.performances)
-        ) {
+        if (localJoke.performances && Array.isArray(localJoke.performances)) {
           for (const performance of localJoke.performances) {
             await prisma.performance.create({
               data: {
@@ -106,12 +97,8 @@ export async function POST(request: Request) {
             name: localRoutine.name,
             targetTime: localRoutine.targetTime || 300,
             flowScore: localRoutine.flowScore,
-            createdAt: localRoutine.createdAt
-              ? new Date(localRoutine.createdAt)
-              : new Date(),
-            updatedAt: localRoutine.updatedAt
-              ? new Date(localRoutine.updatedAt)
-              : new Date(),
+            createdAt: localRoutine.createdAt ? new Date(localRoutine.createdAt) : new Date(),
+            updatedAt: localRoutine.updatedAt ? new Date(localRoutine.updatedAt) : new Date(),
           },
         });
 
@@ -141,10 +128,6 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error("Migration error:", error);
-    return NextResponse.json(
-      { error: "Failed to migrate data" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to migrate data" }, { status: 500 });
   }
 }
-

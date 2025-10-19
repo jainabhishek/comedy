@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Tight 5 - AI-Powered Comedy Writing",
+  title: "🎤 Tight 5 - AI-Powered Comedy Writing",
   description: "Build your perfect 5-minute standup routine with AI assistance",
 };
 

@@ -6,9 +6,10 @@ import { ReactNode } from "react";
 export function ConditionalMain({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const isHomepage = pathname === "/";
+  const isAuthPage = pathname.startsWith("/auth");
 
-  // Homepage: full width, no padding
-  if (isHomepage) {
+  // Homepage and auth pages: full width, no padding
+  if (isHomepage || isAuthPage) {
     return <main className="min-h-screen">{children}</main>;
   }
 

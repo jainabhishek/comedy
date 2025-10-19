@@ -24,7 +24,9 @@ export async function middleware(req: NextRequest) {
 
   if (isAuthPage) {
     if (token) {
-      return NextResponse.redirect(new URL("/", req.url));
+      // If user is already authenticated and tries to access auth pages,
+      // redirect to dashboard instead of homepage
+      return NextResponse.redirect(new URL("/dashboard", req.url));
     }
     return NextResponse.next();
   }

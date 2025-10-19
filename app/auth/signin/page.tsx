@@ -6,8 +6,12 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 
 export default function SignIn() {
   const handleGoogleSignIn = async () => {
+    // Get the callback URL from query params, default to dashboard
+    const urlParams = new URLSearchParams(window.location.search);
+    const callbackUrl = urlParams.get("callbackUrl") || "/dashboard";
+    
     await signIn("google", {
-      callbackUrl: "/",
+      callbackUrl,
     });
   };
 

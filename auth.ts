@@ -25,6 +25,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return session;
     },
+    async redirect({ url, baseUrl }) {
+      // If the URL is relative, allow it
+      if (url.startsWith("/")) {
+        return `${baseUrl}${url}`;
+      }
+      // If callback URL is the same site, allow it
+      if (new URL(url).origin === baseUrl) {
+        return url;
+      }
+      // Default redirect to dashboard after successful sign-in
+      return `${baseUrl}/dashboard`;
+    },
   },
   pages: {
     signIn: "/auth/signin",

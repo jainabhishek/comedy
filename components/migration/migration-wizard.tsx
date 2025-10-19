@@ -98,7 +98,7 @@ export function MigrationWizard({ onComplete }: MigrationWizardProps) {
         </CardHeader>
         <CardContent>
           <p className="mb-4 text-muted">
-            You don't have any local data to migrate. You can start using the app right away!
+            You do not have any local data to migrate. You can start using the app right away!
           </p>
           <Button onClick={handleComplete}>Get Started</Button>
         </CardContent>
@@ -138,7 +138,7 @@ export function MigrationWizard({ onComplete }: MigrationWizardProps) {
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-lg">
-              We've detected that you have local data that can be migrated to the cloud.
+              We have detected that you have local data that can be migrated to the cloud.
             </p>
             <div className="bg-blue-50 p-4 rounded-lg">
               <h3 className="font-semibold mb-2">Your Local Data:</h3>
@@ -148,7 +148,7 @@ export function MigrationWizard({ onComplete }: MigrationWizardProps) {
               </ul>
             </div>
             <p className="text-sm text-muted">
-              By migrating to the cloud, you'll be able to:
+              By migrating to the cloud, you will be able to:
             </p>
             <ul className="list-disc list-inside space-y-1 text-sm">
               <li>Access your jokes from any device</li>
@@ -200,7 +200,7 @@ export function MigrationWizard({ onComplete }: MigrationWizardProps) {
           </CardHeader>
           <CardContent className="space-y-4">
             <p>
-              We're ready to migrate your data to the cloud. This process will:
+              We are ready to migrate your data to the cloud. This process will:
             </p>
             <ul className="list-disc list-inside space-y-1 text-sm">
               <li>Upload your {jokeCount} jokes to the database</li>
@@ -276,4 +276,3 @@ export function MigrationWizard({ onComplete }: MigrationWizardProps) {
     </div>
   );
 }
-

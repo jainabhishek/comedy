@@ -332,7 +332,7 @@ export default function WorkshopPage() {
     setTags((prev) => prev.filter((item) => item !== tag));
   };
 
-  const handleSaveJoke = () => {
+  const handleSaveJoke = async () => {
     if (!currentStructure) {
       alert("Select a structure before saving.");
       return;
@@ -372,23 +372,26 @@ export default function WorkshopPage() {
       .filter(Boolean)
       .join("\n");
 
-    const newJoke = createJoke({
-      title: title.trim(),
-      setup: firstSelection,
-      punchline: lastSelection,
-      tags,
-      estimatedTime,
-      energy: "medium",
-      type: "observational",
-      status: "draft",
-      versions: [],
-      performances: [],
-      notes: `${finalNotes}\n\nStructure Parts:\n${flattenedContent}`.trim(),
-      structure: structureMetadata,
-      techniques: selectedTechniques.length > 0 ? selectedTechniques : undefined,
-    });
+    try {
+      const newJoke = await createJoke({
+        title: title.trim(),
+        setup: firstSelection,
+        punchline: lastSelection,
+        tags,
+        estimatedTime,
+        energy: "medium",
+        type: "observational",
+        status: "draft",
+        notes: `${finalNotes}\n\nStructure Parts:\n${flattenedContent}`.trim(),
+        structure: structureMetadata,
+        techniques: selectedTechniques.length > 0 ? selectedTechniques : undefined,
+      });
 
-    router.push(`/editor/${newJoke.id}`);
+      router.push(`/editor/${newJoke.id}`);
+    } catch (err) {
+      console.error("Failed to save joke:", err);
+      alert("Failed to save the joke. Please try again.");
+    }
   };
 
   const stepIndicators = useMemo(() => {

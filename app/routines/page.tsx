@@ -14,12 +14,12 @@ export default function RoutinesPage() {
   const { routines, createRoutine, loading: routinesLoading } = useRoutinesQuery();
   const { jokes, loading: jokesLoading } = useJokesQuery();
 
-  if (routinesLoading) {
+  if (routinesLoading || jokesLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center">
           <div className="animate-spin h-12 w-12 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4" />
-          <p className="text-muted">Loading routines...</p>
+          <p className="text-muted">Loading routine data...</p>
         </div>
       </div>
     );
@@ -32,14 +32,13 @@ export default function RoutinesPage() {
     }, 0);
   };
 
-  const handleCreateRoutine = () => {
+  const handleCreateRoutine = async () => {
     const name = prompt("Enter routine name:", "New Routine");
     if (name) {
-      const routine = createRoutine({
+      const routine = await createRoutine({
         name,
         jokeIds: [],
         targetTime: 300,
-        currentTime: 0,
       });
       router.push(`/routine/${routine.id}`);
     }

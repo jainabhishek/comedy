@@ -1,17 +1,34 @@
 import { auth } from "@/auth";
 import { NextResponse } from "next/server";
 
+type JokeValidationPayload = {
+  title?: unknown;
+  setup?: unknown;
+  punchline?: unknown;
+  energy?: unknown;
+  type?: unknown;
+  status?: unknown;
+  estimatedTime?: unknown;
+  tags?: unknown;
+};
+
+type RoutineValidationPayload = {
+  name?: unknown;
+  targetTime?: unknown;
+  jokeIds?: unknown;
+};
+
 /**
  * Require authentication for API routes
  * Returns the authenticated user or throws an error
  */
 export async function requireAuth() {
   const session = await auth();
-  
+
   if (!session?.user?.id) {
     throw new Error("Unauthorized");
   }
-  
+
   return session.user;
 }
 
@@ -20,7 +37,7 @@ export async function requireAuth() {
  */
 export function requireOwnership(userId: string, resourceUserId: string) {
   if (userId !== resourceUserId) {
-    throw new Error("Forbidden: You don't own this resource");
+    throw new Error("Forbidden: You do not own this resource");
   }
 }
 
@@ -36,47 +53,64 @@ export function sanitizeInput(input: string): string {
 /**
  * Validate joke data
  */
-export function validateJokeData(data: any): { valid: boolean; errors: string[] } {
+export function validateJokeData(data: JokeValidationPayload): { valid: boolean; errors: string[] } {
   const errors: string[] = [];
 
-  if (!data.title || typeof data.title !== "string") {
+  const title = data.title;
+  if (typeof title !== "string" || title.length === 0) {
     errors.push("Title is required and must be a string");
-  } else if (data.title.length > 200) {
+  } else if (title.length > 200) {
     errors.push("Title must be less than 200 characters");
   }
 
-  if (!data.setup || typeof data.setup !== "string") {
+  const setup = data.setup;
+  if (typeof setup !== "string" || setup.length === 0) {
     errors.push("Setup is required and must be a string");
-  } else if (data.setup.length > 5000) {
+  } else if (setup.length > 5000) {
     errors.push("Setup must be less than 5000 characters");
   }
 
-  if (!data.punchline || typeof data.punchline !== "string") {
+  const punchline = data.punchline;
+  if (typeof punchline !== "string" || punchline.length === 0) {
     errors.push("Punchline is required and must be a string");
-  } else if (data.punchline.length > 5000) {
+  } else if (punchline.length > 5000) {
     errors.push("Punchline must be less than 5000 characters");
   }
 
+  const energy = data.energy;
   const validEnergies = ["low", "medium", "high"];
-  if (data.energy && !validEnergies.includes(data.energy)) {
-    errors.push("Energy must be one of: low, medium, high");
+  if (energy !== undefined) {
+    if (typeof energy !== "string" || !validEnergies.includes(energy)) {
+      errors.push("Energy must be one of: low, medium, high");
+    }
   }
 
+  const type = data.type;
   const validTypes = ["observational", "one-liner", "story", "callback", "crowd-work"];
-  if (data.type && !validTypes.includes(data.type)) {
-    errors.push("Type must be one of: observational, one-liner, story, callback, crowd-work");
+  if (type !== undefined) {
+    if (typeof type !== "string" || !validTypes.includes(type)) {
+      errors.push("Type must be one of: observational, one-liner, story, callback, crowd-work");
+    }
   }
 
+  const status = data.status;
   const validStatuses = ["draft", "working", "polished", "retired"];
-  if (data.status && !validStatuses.includes(data.status)) {
-    errors.push("Status must be one of: draft, working, polished, retired");
+  if (status !== undefined) {
+    if (typeof status !== "string" || !validStatuses.includes(status)) {
+      errors.push("Status must be one of: draft, working, polished, retired");
+    }
   }
 
-  if (data.estimatedTime && (typeof data.estimatedTime !== "number" || data.estimatedTime < 0 || data.estimatedTime > 600)) {
+  const estimatedTime = data.estimatedTime;
+  if (
+    estimatedTime !== undefined &&
+    (typeof estimatedTime !== "number" || estimatedTime < 0 || estimatedTime > 600)
+  ) {
     errors.push("Estimated time must be a number between 0 and 600 seconds");
   }
 
-  if (data.tags && !Array.isArray(data.tags)) {
+  const tags = data.tags;
+  if (tags !== undefined && !Array.isArray(tags)) {
     errors.push("Tags must be an array");
   }
 
@@ -89,20 +123,26 @@ export function validateJokeData(data: any): { valid: boolean; errors: string[] 
 /**
  * Validate routine data
  */
-export function validateRoutineData(data: any): { valid: boolean; errors: string[] } {
+export function validateRoutineData(data: RoutineValidationPayload): { valid: boolean; errors: string[] } {
   const errors: string[] = [];
 
-  if (!data.name || typeof data.name !== "string") {
+  const name = data.name;
+  if (typeof name !== "string" || name.length === 0) {
     errors.push("Name is required and must be a string");
-  } else if (data.name.length > 200) {
+  } else if (name.length > 200) {
     errors.push("Name must be less than 200 characters");
   }
 
-  if (data.targetTime && (typeof data.targetTime !== "number" || data.targetTime < 0 || data.targetTime > 3600)) {
+  const targetTime = data.targetTime;
+  if (
+    targetTime !== undefined &&
+    (typeof targetTime !== "number" || targetTime < 0 || targetTime > 3600)
+  ) {
     errors.push("Target time must be a number between 0 and 3600 seconds");
   }
 
-  if (data.jokeIds && !Array.isArray(data.jokeIds)) {
+  const jokeIds = data.jokeIds;
+  if (jokeIds !== undefined && !Array.isArray(jokeIds)) {
     errors.push("Joke IDs must be an array");
   }
 

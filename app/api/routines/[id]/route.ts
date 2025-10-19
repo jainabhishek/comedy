@@ -92,7 +92,7 @@ export async function PATCH(
     }
 
     // Update routine
-    const routine = await prisma.routine.update({
+    await prisma.routine.update({
       where: { id },
       data: {
         ...(body.name !== undefined && { name: body.name }),
@@ -201,4 +201,3 @@ export async function DELETE(
     );
   }
 }
-

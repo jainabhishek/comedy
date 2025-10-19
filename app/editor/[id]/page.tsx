@@ -83,6 +83,17 @@ export default function JokeEditor({ params }: { params: Promise<{ id: string }>
     }
   }, [joke, editedSetup, editedPunchline, editedTitle, editedNotes, editedTags, editedTime, editedEnergy, editedType, editedStatus]);
 
+  if (jokesLoading || !jokeId) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-center">
+          <div className="animate-spin h-12 w-12 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4" />
+          <p className="text-muted">Loading joke...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!joke) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
@@ -383,7 +394,7 @@ export default function JokeEditor({ params }: { params: Promise<{ id: string }>
                     <p className="text-xs text-muted mb-2">Techniques:</p>
                     <div className="flex flex-wrap gap-1">
                       {joke.techniques.map((technique) => (
-                        <Badge key={technique} variant="secondary" className="text-xs">
+                        <Badge key={technique} variant="outline" className="text-xs">
                           {technique === "irony-sarcasm" ? "Irony/Sarcasm" : 
                            technique === "character-voice" ? "Character Voice" : 
                            "Benign Violation"}

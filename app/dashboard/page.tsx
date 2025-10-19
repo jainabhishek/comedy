@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import { useJokesQuery } from "@/hooks/useJokesQuery";
 import { useRoutinesQuery } from "@/hooks/useRoutinesQuery";
@@ -15,20 +15,18 @@ export default function Dashboard() {
   const { jokes, loading: jokesLoading } = useJokesQuery();
   const { routines, loading: routinesLoading } = useRoutinesQuery();
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredJokes, setFilteredJokes] = useState<Joke[]>([]);
-
-  useEffect(() => {
-    if (searchQuery) {
-      const filtered = jokes.filter(
-        (joke) =>
-          joke.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          joke.setup.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          joke.punchline.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      setFilteredJokes(filtered);
-    } else {
-      setFilteredJokes(jokes);
+  const filteredJokes = useMemo(() => {
+    if (!searchQuery) {
+      return jokes;
     }
+
+    const loweredQuery = searchQuery.toLowerCase();
+    return jokes.filter(
+      (joke) =>
+        joke.title.toLowerCase().includes(loweredQuery) ||
+        joke.setup.toLowerCase().includes(loweredQuery) ||
+        joke.punchline.toLowerCase().includes(loweredQuery)
+    );
   }, [searchQuery, jokes]);
 
   if (jokesLoading || routinesLoading) {

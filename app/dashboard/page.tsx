@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useJokes } from "@/hooks/useJokes";
-import { useRoutines } from "@/hooks/useRoutines";
+import { useJokesQuery } from "@/hooks/useJokesQuery";
+import { useRoutinesQuery } from "@/hooks/useRoutinesQuery";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -12,8 +12,8 @@ import { formatDate, formatTime } from "@/lib/utils";
 import type { Joke } from "@/lib/types";
 
 export default function Dashboard() {
-  const { jokes, loading: jokesLoading } = useJokes();
-  const { routines, loading: routinesLoading } = useRoutines();
+  const { jokes, loading: jokesLoading } = useJokesQuery();
+  const { routines, loading: routinesLoading } = useRoutinesQuery();
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredJokes, setFilteredJokes] = useState<Joke[]>([]);
 

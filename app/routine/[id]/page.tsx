@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
-import { useJokes } from "@/hooks/useJokes";
-import { useRoutines } from "@/hooks/useRoutines";
+import { useJokesQuery } from "@/hooks/useJokesQuery";
+import { useRoutinesQuery } from "@/hooks/useRoutinesQuery";
 import { useAI } from "@/hooks/useAI";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -15,8 +15,8 @@ import type { Routine, Joke, FlowAnalysis, RoutineJokeSummary } from "@/lib/type
 
 export default function RoutineBuilder({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
-  const { jokes } = useJokes();
-  const { routines, updateRoutine, deleteRoutine } = useRoutines();
+  const { jokes, loading: jokesLoading } = useJokesQuery();
+  const { routines, updateRoutine, deleteRoutine, loading: routinesLoading } = useRoutinesQuery();
   const { optimizeRoutine, analyzeRoutine, loading: aiLoading } = useAI();
 
   const [routineId, setRoutineId] = useState<string | null>(null);

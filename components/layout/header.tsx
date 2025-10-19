@@ -4,9 +4,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { UserMenu } from "@/components/auth/user-menu";
+import { Button } from "@/components/ui/button";
+import { useSession } from "next-auth/react";
 
 export function Header() {
   const pathname = usePathname();
+  const isHomepage = pathname === "/";
+  const { data: session, status } = useSession();
 
   type NavItem = {
     href: string;
@@ -31,27 +35,39 @@ export function Header() {
               <span className="text-xl font-bold text-primary">Tight 5</span>
             </Link>
 
-            <nav className="flex items-center gap-1">
-              {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={cn(
-                    "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
-                    (item.exact ? pathname === item.href : pathname.startsWith(item.href))
-                      ? "bg-primary text-white shadow-glass"
-                      : "text-muted hover:text-foreground hover:bg-glass-bg/30"
-                  )}
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </nav>
+            {!isHomepage && (
+              <nav className="flex items-center gap-1">
+                {navItems.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={cn(
+                      "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+                      (item.exact ? pathname === item.href : pathname.startsWith(item.href))
+                        ? "bg-primary text-white shadow-glass"
+                        : "text-muted hover:text-foreground hover:bg-glass-bg/30"
+                    )}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </nav>
+            )}
           </div>
 
           <div className="flex items-center gap-4">
-            <span className="hidden lg:block text-xs text-muted/70">AI-Powered Comedy Writing</span>
-            <UserMenu />
+            {!isHomepage && (
+              <span className="hidden lg:block text-xs text-muted/70">AI-Powered Comedy Writing</span>
+            )}
+            {isHomepage && status !== "loading" && !session ? (
+              <Link href="/auth/signin">
+                <Button size="sm" className="shadow-md">
+                  Sign In
+                </Button>
+              </Link>
+            ) : (
+              <UserMenu />
+            )}
           </div>
         </div>
       </div>

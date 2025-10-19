@@ -2,8 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useRoutines } from "@/hooks/useRoutines";
-import { useJokes } from "@/hooks/useJokes";
+import { useRoutinesQuery } from "@/hooks/useRoutinesQuery";
+import { useJokesQuery } from "@/hooks/useJokesQuery";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -11,8 +11,8 @@ import { formatDate, formatTime } from "@/lib/utils";
 
 export default function RoutinesPage() {
   const router = useRouter();
-  const { routines, createRoutine, loading: routinesLoading } = useRoutines();
-  const { jokes } = useJokes();
+  const { routines, createRoutine, loading: routinesLoading } = useRoutinesQuery();
+  const { jokes, loading: jokesLoading } = useJokesQuery();
 
   if (routinesLoading) {
     return (

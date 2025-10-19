@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useJokes } from "@/hooks/useJokes";
+import { useJokesQuery } from "@/hooks/useJokesQuery";
 import { useAI } from "@/hooks/useAI";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -22,7 +22,7 @@ import { nanoid } from "nanoid";
 
 export default function JokeEditor({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
-  const { jokes, updateJoke, deleteJoke } = useJokes();
+  const { jokes, updateJoke, deleteJoke, loading: jokesLoading } = useJokesQuery();
   const { improveJoke, analyzeJoke, loading: aiLoading } = useAI();
 
   const [jokeId, setJokeId] = useState<string | null>(null);

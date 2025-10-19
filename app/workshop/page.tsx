@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useJokes } from "@/hooks/useJokes";
+import { useJokesQuery } from "@/hooks/useJokesQuery";
 import { useAI } from "@/hooks/useAI";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,7 +25,7 @@ const ESTIMATED_TIME_RANGE = { min: 10, max: 600 };
 
 export default function WorkshopPage() {
   const router = useRouter();
-  const { createJoke } = useJokes();
+  const { createJoke } = useJokesQuery();
   const { generatePartOptions, loading, loadingPartId, suggestTags, error } = useAI();
 
   const [step, setStep] = useState<Step>("premise");

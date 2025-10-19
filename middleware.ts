@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 
 const PUBLIC_PATHS = ["/", "/favicon.ico"];
-const PUBLIC_PREFIXES = ["/api/auth/", "/_next/"];
+const PUBLIC_PREFIXES = ["/api/auth/", "/_next/", "/icon", "/apple-icon"];
 
 function isPublicPath(pathname: string) {
   if (PUBLIC_PATHS.includes(pathname)) {

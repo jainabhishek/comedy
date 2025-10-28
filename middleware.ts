@@ -1,5 +1,6 @@
+import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { withAuth } from "next-auth/middleware";
+import { getToken } from "next-auth/jwt";
 
 const PUBLIC_PATHS = new Set(["/", "/favicon.ico", "/auth/signin", "/auth/error"]);
 const PUBLIC_PREFIXES = ["/api/auth/", "/_next/", "/icon", "/apple-icon"];
@@ -12,42 +13,34 @@ function isPublicPath(pathname: string) {
   return PUBLIC_PREFIXES.some((prefix) => pathname.startsWith(prefix));
 }
 
-export default withAuth(
-  (req) => {
-    const { pathname } = req.nextUrl;
-    const token = req.nextauth.token;
+export async function middleware(req: NextRequest) {
+  const { pathname } = req.nextUrl;
+  const isAuthPage = pathname.startsWith("/auth/");
+  const isPublic = isPublicPath(pathname);
 
-    if (pathname.startsWith("/auth/")) {
-      if (token) {
-        return NextResponse.redirect(new URL("/dashboard", req.url));
-      }
-      return NextResponse.next();
+  const token = await getToken({
+    req,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
+
+  if (isAuthPage) {
+    if (token) {
+      return NextResponse.redirect(new URL("/dashboard", req.url));
     }
-
-    if (!token && !isPublicPath(pathname)) {
-      const signInUrl = new URL("/auth/signin", req.url);
-      const search = req.nextUrl.search || "";
-      const hash = req.nextUrl.hash || "";
-      const callbackUrl = `${pathname}${search}${hash}` || "/dashboard";
-      signInUrl.searchParams.set("callbackUrl", callbackUrl);
-      return NextResponse.redirect(signInUrl);
-    }
-
     return NextResponse.next();
-  },
-  {
-    callbacks: {
-      authorized: ({ token, req }) => {
-        const { pathname } = req.nextUrl;
-        if (pathname.startsWith("/auth/") || isPublicPath(pathname)) {
-          return true;
-        }
-
-        return Boolean(token);
-      },
-    },
   }
-);
+
+  if (!isPublic && !token) {
+    const signInUrl = new URL("/auth/signin", req.url);
+    const search = req.nextUrl.search || "";
+    const hash = req.nextUrl.hash || "";
+    const callbackUrl = `${pathname}${search}${hash}` || "/dashboard";
+    signInUrl.searchParams.set("callbackUrl", callbackUrl);
+    return NextResponse.redirect(signInUrl);
+  }
+
+  return NextResponse.next();
+}
 
 export const config = {
   matcher: [

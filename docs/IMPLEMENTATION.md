@@ -1985,7 +1985,7 @@ vercel --prod
 - Built with Next.js 15, TypeScript, Tailwind CSS v4, OpenAI GPT-5, Prisma, React Query
 - Drag-and-drop powered by @hello-pangea/dnd
 - **Database**: PostgreSQL via Supabase/Prisma
-- **Authentication**: NextAuth.js v5 with Google OAuth (middleware updated 2025-10-28 to use `auth()` helper for session detection on custom domains)
+- **Authentication**: NextAuth.js v5 with Google OAuth (middleware updated 2025-10-28 to use `withAuth` helper for session detection without bloating Edge bundle size)
 - **Data Fetching**: React Query with optimistic updates
 - **Migration**: Automatic LocalStorage to database wizard
 

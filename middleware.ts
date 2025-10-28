@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/auth";
+import { withAuth } from "next-auth/middleware";
 
 const PUBLIC_PATHS = new Set(["/", "/favicon.ico", "/auth/signin", "/auth/error"]);
 const PUBLIC_PREFIXES = ["/api/auth/", "/_next/", "/icon", "/apple-icon"];
@@ -12,27 +12,42 @@ function isPublicPath(pathname: string) {
   return PUBLIC_PREFIXES.some((prefix) => pathname.startsWith(prefix));
 }
 
-export default auth((req) => {
-  const { pathname } = req.nextUrl;
-  const isAuthPage = pathname.startsWith("/auth/");
-  const isPublic = isPublicPath(pathname);
-  const isAuthenticated = Boolean(req.auth);
+export default withAuth(
+  (req) => {
+    const { pathname } = req.nextUrl;
+    const token = req.nextauth.token;
 
-  if (isAuthPage && isAuthenticated) {
-    return NextResponse.redirect(new URL("/dashboard", req.nextUrl));
+    if (pathname.startsWith("/auth/")) {
+      if (token) {
+        return NextResponse.redirect(new URL("/dashboard", req.url));
+      }
+      return NextResponse.next();
+    }
+
+    if (!token && !isPublicPath(pathname)) {
+      const signInUrl = new URL("/auth/signin", req.url);
+      const search = req.nextUrl.search || "";
+      const hash = req.nextUrl.hash || "";
+      const callbackUrl = `${pathname}${search}${hash}` || "/dashboard";
+      signInUrl.searchParams.set("callbackUrl", callbackUrl);
+      return NextResponse.redirect(signInUrl);
+    }
+
+    return NextResponse.next();
+  },
+  {
+    callbacks: {
+      authorized: ({ token, req }) => {
+        const { pathname } = req.nextUrl;
+        if (pathname.startsWith("/auth/") || isPublicPath(pathname)) {
+          return true;
+        }
+
+        return Boolean(token);
+      },
+    },
   }
-
-  if (!isAuthPage && !isPublic && !isAuthenticated) {
-    const signInUrl = new URL("/auth/signin", req.nextUrl);
-    const search = req.nextUrl.search || "";
-    const hash = req.nextUrl.hash || "";
-    const callbackUrl = `${pathname}${search}${hash}` || "/dashboard";
-    signInUrl.searchParams.set("callbackUrl", callbackUrl);
-    return NextResponse.redirect(signInUrl);
-  }
-
-  return NextResponse.next();
-});
+);
 
 export const config = {
   matcher: [

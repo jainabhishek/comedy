@@ -51,10 +51,5 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {
     strategy: "jwt",
   },
-  events: {
-    error(error) {
-      console.error("NextAuth error", error);
-    },
-  },
   debug: process.env.NODE_ENV === "development",
 });

@@ -1,50 +1,38 @@
-import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { getToken } from "next-auth/jwt";
+import { auth } from "@/auth";
 
-const PUBLIC_PATHS = ["/", "/favicon.ico"];
+const PUBLIC_PATHS = new Set(["/", "/favicon.ico", "/auth/signin", "/auth/error"]);
 const PUBLIC_PREFIXES = ["/api/auth/", "/_next/", "/icon", "/apple-icon"];
 
 function isPublicPath(pathname: string) {
-  if (PUBLIC_PATHS.includes(pathname)) {
+  if (PUBLIC_PATHS.has(pathname)) {
     return true;
   }
 
   return PUBLIC_PREFIXES.some((prefix) => pathname.startsWith(prefix));
 }
 
-export async function middleware(req: NextRequest) {
+export default auth((req) => {
   const { pathname } = req.nextUrl;
   const isAuthPage = pathname.startsWith("/auth/");
-  const token = await getToken({
-    req,
-    secret: process.env.NEXTAUTH_SECRET,
-  });
+  const isPublic = isPublicPath(pathname);
+  const isAuthenticated = Boolean(req.auth);
 
-  if (isAuthPage) {
-    if (token) {
-      // If user is already authenticated and tries to access auth pages,
-      // redirect to dashboard instead of homepage
-      return NextResponse.redirect(new URL("/dashboard", req.url));
-    }
-    return NextResponse.next();
+  if (isAuthPage && isAuthenticated) {
+    return NextResponse.redirect(new URL("/dashboard", req.nextUrl));
   }
 
-  if (isPublicPath(pathname)) {
-    return NextResponse.next();
-  }
-
-  if (!token) {
-    const signInUrl = new URL("/auth/signin", req.url);
+  if (!isAuthPage && !isPublic && !isAuthenticated) {
+    const signInUrl = new URL("/auth/signin", req.nextUrl);
     const search = req.nextUrl.search || "";
     const hash = req.nextUrl.hash || "";
-    const callbackUrl = `${pathname}${search}${hash}`;
+    const callbackUrl = `${pathname}${search}${hash}` || "/dashboard";
     signInUrl.searchParams.set("callbackUrl", callbackUrl);
     return NextResponse.redirect(signInUrl);
   }
 
   return NextResponse.next();
-}
+});
 
 export const config = {
   matcher: [

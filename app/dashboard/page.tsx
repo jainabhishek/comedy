@@ -9,7 +9,6 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { formatDate, formatTime } from "@/lib/utils";
-import type { Joke } from "@/lib/types";
 
 export default function Dashboard() {
   const { jokes, loading: jokesLoading } = useJokesQuery();

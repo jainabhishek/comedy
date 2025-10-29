@@ -18,9 +18,18 @@ export async function middleware(req: NextRequest) {
   const isAuthPage = pathname.startsWith("/auth/");
   const isPublic = isPublicPath(pathname);
 
+  const secret = process.env.NEXTAUTH_SECRET ?? process.env.AUTH_SECRET;
+
+  const cookieName = req.cookies.has("__Secure-authjs.session-token")
+    ? "__Secure-authjs.session-token"
+    : req.cookies.has("authjs.session-token")
+      ? "authjs.session-token"
+      : undefined;
+
   const token = await getToken({
     req,
-    secret: process.env.NEXTAUTH_SECRET,
+    secret,
+    cookieName,
   });
 
   if (isAuthPage) {
